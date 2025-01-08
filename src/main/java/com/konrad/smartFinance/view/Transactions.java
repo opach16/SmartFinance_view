@@ -1,6 +1,7 @@
 package com.konrad.smartFinance.view;
 
 import com.konrad.smartFinance.domain.Transaction;
+import com.konrad.smartFinance.service.TransactionService;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
@@ -12,6 +13,7 @@ import com.vaadin.flow.router.Route;
 @Route("transactions")
 public class Transactions extends VerticalLayout {
 
+    private TransactionService transactionService = TransactionService.getInstance();
     private Grid<Transaction> grid = new Grid<>(Transaction.class);
     private TextField filter = new TextField();
     private Button addTransaction = new Button("Add Transaction");
@@ -22,8 +24,10 @@ public class Transactions extends VerticalLayout {
         filter.setClearButtonVisible(true);
         filter.setValueChangeMode(ValueChangeMode.EAGER);
 
-        grid.setColumns("date", "type", "name", "amount");
+        grid.setColumns("transactionDate", "transactionType", "name", "amount", "symbol");
         grid.setSizeFull();
+        refresh();
+        grid.asSingleSelect().addValueChangeListener(event -> form.setTransaction(grid.asSingleSelect().getValue()));
 
         form.setVisible(false);
 
@@ -42,5 +46,9 @@ public class Transactions extends VerticalLayout {
         });
 
         add(toolbar, mainContent);
+    }
+
+    public void refresh() {
+        grid.setItems(transactionService.getTransactions());
     }
 }

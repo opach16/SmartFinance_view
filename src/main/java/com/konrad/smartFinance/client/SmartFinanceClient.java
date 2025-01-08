@@ -1,9 +1,6 @@
 package com.konrad.smartFinance.client;
 
-import com.konrad.smartFinance.domain.CryptoRates;
-import com.konrad.smartFinance.domain.CryptoTransaction;
-import com.konrad.smartFinance.domain.CurrencyRates;
-import com.konrad.smartFinance.domain.CurrencyTransaction;
+import com.konrad.smartFinance.domain.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
@@ -55,5 +52,14 @@ public class SmartFinanceClient {
                 .toUri();
         CryptoTransaction[] response = restTemplate.getForObject(url, CryptoTransaction[].class);
         return response != null ? new HashSet<CryptoTransaction>(Arrays.asList(response)) : Collections.emptySet();
+    }
+
+    public Set<Transaction> fetchTransactions() {
+        URI url = UriComponentsBuilder.fromUriString("http://localhost:8080/api/v1/accounts/4/transactions")
+                .build()
+                .encode()
+                .toUri();
+        Transaction[] response = restTemplate.getForObject(url, Transaction[].class);
+        return response != null ? new HashSet<Transaction>(Arrays.asList(response)) : Collections.emptySet();
     }
 }

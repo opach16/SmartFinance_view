@@ -2,5 +2,5 @@ package com.konrad.smartFinance;
 
 public enum CurrencySymbol {
 
-    PLN, USD, EUR
+    PLN, USD, EUR, GBP, CHF
 }
