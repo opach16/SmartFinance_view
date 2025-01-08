@@ -6,7 +6,6 @@ import lombok.Getter;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 @Getter
@@ -21,7 +20,7 @@ public class CurrencyService {
     }
 
     public static CurrencyService getInstance() {
-        if(currencyService == null) {
+        if (currencyService == null) {
             currencyService = new CurrencyService();
         }
         return currencyService;
@@ -32,7 +31,6 @@ public class CurrencyService {
     }
 
     private Set<CurrencyRates> addCurrencyRates() {
-        List<CurrencyRates> currencyRates = client.fetchCurrencyRates();
-        return new HashSet<>(currencyRates);
+        return client.fetchCurrencyRates();
     }
 }
