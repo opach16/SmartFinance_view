@@ -3,6 +3,7 @@ package com.konrad.smartFinance.view;
 import com.konrad.smartFinance.domain.CurrencyRates;
 import com.konrad.smartFinance.domain.CurrencyTransaction;
 import com.konrad.smartFinance.service.CurrencyService;
+import com.konrad.smartFinance.service.CurrencyTransactionService;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
@@ -14,20 +15,22 @@ import com.vaadin.flow.router.Route;
 @Route("currencies")
 public class Currencies extends VerticalLayout {
 
+    private final CurrencyTransactionService currencyTransactionService = CurrencyTransactionService.getInstance();
     private final CurrencyService currencyService = CurrencyService.getInstance();
     private Grid<CurrencyTransaction> mainGrid = new Grid<>(CurrencyTransaction.class);
     private Grid<CurrencyRates> ratesGrid = new Grid<>(CurrencyRates.class);
 
     private TextField filter = new TextField();
     private Button assets = new Button("Assets");
-    private Button rates =new Button("Rates");
+    private Button rates = new Button("Rates");
 
     public Currencies() {
         filter.setPlaceholder("Filter");
         filter.setClearButtonVisible(true);
         filter.setValueChangeMode(ValueChangeMode.EAGER);
 
-        mainGrid.setColumns("transactionDate", "symbol", "name", "amount", "price", "transactionValue", "currentValue");
+        mainGrid.setColumns("transactionDate", "transactionType", "symbol", "amount", "price", "transactionValue", "currentValue");
+        mainGrid.setItems(currencyTransactionService.getCurrencyTransactions());
         mainGrid.setSizeFull();
 
         ratesGrid.setColumns("symbol", "price");
