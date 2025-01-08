@@ -1,5 +1,7 @@
 package com.konrad.smartFinance.client;
 
+import com.konrad.smartFinance.domain.CryptoRates;
+import com.konrad.smartFinance.domain.CryptoTransaction;
 import com.konrad.smartFinance.domain.CurrencyRates;
 import com.konrad.smartFinance.domain.CurrencyTransaction;
 import lombok.RequiredArgsConstructor;
@@ -35,5 +37,23 @@ public class SmartFinanceClient {
                 .toUri();
         CurrencyTransaction[] response = restTemplate.getForObject(url, CurrencyTransaction[].class);
         return response != null ? new HashSet<CurrencyTransaction>(Arrays.asList(response)) : Collections.emptySet();
+    }
+
+    public Set<CryptoRates> fetchCryptoRates() {
+        URI url = UriComponentsBuilder.fromUriString("http://localhost:8080/api/v1/crypto")
+                .build()
+                .encode()
+                .toUri();
+        CryptoRates[] response = restTemplate.getForObject(url, CryptoRates[].class);
+        return response != null ? new HashSet<CryptoRates>(Arrays.asList(response)) : Collections.emptySet();
+    }
+
+    public Set<CryptoTransaction> fetchCryptoTransactions() {
+        URI url = UriComponentsBuilder.fromUriString("http://localhost:8080/api/v1/crypto-transactions")
+                .build()
+                .encode()
+                .toUri();
+        CryptoTransaction[] response = restTemplate.getForObject(url, CryptoTransaction[].class);
+        return response != null ? new HashSet<CryptoTransaction>(Arrays.asList(response)) : Collections.emptySet();
     }
 }
