@@ -34,7 +34,7 @@ public class Currencies extends VerticalLayout {
         mainGrid.setSizeFull();
 
         ratesGrid.setColumns("symbol", "price");
-        ratesGrid.setItems(currencyService.getCurrencyRatesSet());
+        ratesGrid.setItems(currencyService.getCurrencyRates());
         ratesGrid.setSizeFull();
         ratesGrid.setVisible(false);
 

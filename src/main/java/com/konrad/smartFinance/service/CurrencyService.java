@@ -3,20 +3,22 @@ package com.konrad.smartFinance.service;
 import com.konrad.smartFinance.client.SmartFinanceClient;
 import com.konrad.smartFinance.domain.CurrencyRates;
 import lombok.Getter;
+import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.HashSet;
 import java.util.Set;
 
 @Getter
+@Service
 public class CurrencyService {
 
-    private final Set<CurrencyRates> currencyRatesSet;
+    private final SmartFinanceClient smartFinanceClient;
     private static CurrencyService currencyService;
-    private final SmartFinanceClient client = new SmartFinanceClient(new RestTemplate());
+    private Set<CurrencyRates> currencyRates;
 
     private CurrencyService() {
-        currencyRatesSet = addCurrencyRates();
+        smartFinanceClient = new SmartFinanceClient(new RestTemplate());
+        updateCurrencyRates();
     }
 
     public static CurrencyService getInstance() {
@@ -26,11 +28,7 @@ public class CurrencyService {
         return currencyService;
     }
 
-    public Set<CurrencyRates> getCurrencyRatesSet() {
-        return new HashSet<>(currencyRatesSet);
-    }
-
-    private Set<CurrencyRates> addCurrencyRates() {
-        return client.fetchCurrencyRates();
+    private void updateCurrencyRates() {
+        currencyRates = smartFinanceClient.fetchCurrencyRates();
     }
 }

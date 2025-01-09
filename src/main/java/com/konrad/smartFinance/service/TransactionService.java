@@ -3,15 +3,14 @@ package com.konrad.smartFinance.service;
 import com.konrad.smartFinance.client.SmartFinanceClient;
 import com.konrad.smartFinance.domain.Transaction;
 import lombok.Getter;
-import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.Set;
 import java.util.logging.Logger;
 
 @Getter
-@Component
+@Service
 public class TransactionService {
 
     Logger logger = Logger.getLogger(TransactionService.class.getName());
@@ -31,6 +30,7 @@ public class TransactionService {
         return transactionService;
     }
 
+    //    @Scheduled(fixedRate = 20000)
     public void updateTransactions() {
         transactions = smartFinanceClient.fetchTransactions();
         System.out.println("Transactions fetched: " + transactions.size());
