@@ -31,4 +31,12 @@ public class CryptoTransactionService {
     public void updateCryptoTransactions() {
         cryptoTransactions = smartFinanceClient.fetchCryptoTransactions();
     }
+
+    public void save(CryptoTransaction transaction) {
+        this.cryptoTransactions.add(transaction);
+    }
+
+    public void delete(CryptoTransaction transaction) {
+        this.cryptoTransactions.remove(transaction);
+    }
 }

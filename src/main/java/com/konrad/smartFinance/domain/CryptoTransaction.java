@@ -2,6 +2,8 @@ package com.konrad.smartFinance.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.konrad.smartFinance.CryptoSymbol;
+import com.konrad.smartFinance.CryptoTransactionType;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -13,8 +15,10 @@ import java.time.LocalDate;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class CryptoTransaction {
 
+    @JsonProperty("transactionType")
+    private CryptoTransactionType transactionType;
     @JsonProperty("cryptocurrencySymbol")
-    private String symbol;
+    private CryptoSymbol symbol;
     @JsonProperty("cryptocurrencyName")
     private String name;
     @JsonProperty("amount")
