@@ -22,7 +22,7 @@ public class CryptoTransactionLayout extends VerticalLayout {
         filter.setClearButtonVisible(true);
         filter.setValueChangeMode(ValueChangeMode.EAGER);
 
-        grid.setColumns("transactionDate", "transactionType", "name", "symbol", "amount", "transactionValue", "currentValue");
+        grid.setColumns("transactionDate", "transactionType", "name", "symbol", "amount", "price", "transactionValue", "currentValue");
         grid.setSizeFull();
         refresh();
         grid.asSingleSelect().addValueChangeListener(event -> form.setTransaction(grid.asSingleSelect().getValue()));
