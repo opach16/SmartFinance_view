@@ -22,7 +22,7 @@ public class CurrencyTransactionLayout extends VerticalLayout {
         filter.setClearButtonVisible(true);
         filter.setValueChangeMode(ValueChangeMode.EAGER);
 
-        grid.setColumns("transactionDate", "transactionType", "symbol", "amount", "price", "transactionValue", "currentValue");
+        grid.setColumns("transactionId", "transactionDate", "transactionType", "symbol", "amount", "price", "transactionValue", "currentValue");
         grid.setSizeFull();
         refresh();
         grid.asSingleSelect().addValueChangeListener(event -> form.setTransaction(grid.asSingleSelect().getValue()));

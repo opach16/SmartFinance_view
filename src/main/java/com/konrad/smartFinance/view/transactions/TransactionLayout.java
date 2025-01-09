@@ -22,7 +22,7 @@ public class TransactionLayout extends VerticalLayout {
         filter.setClearButtonVisible(true);
         filter.setValueChangeMode(ValueChangeMode.EAGER);
 
-        grid.setColumns("transactionDate", "transactionType", "name", "amount", "symbol");
+        grid.setColumns("transactionId", "transactionDate", "transactionType", "name", "amount", "price", "symbol", "transactionValue");
         grid.setSizeFull();
         refresh();
         grid.asSingleSelect().addValueChangeListener(event -> form.setTransaction(grid.asSingleSelect().getValue()));

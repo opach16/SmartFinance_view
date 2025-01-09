@@ -8,12 +8,13 @@ import lombok.Data;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.Objects;
 
 @Data
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Transaction {
 
+    @JsonProperty("id")
+    private Long transactionId;
     @JsonProperty("transactionDate")
     private LocalDate transactionDate;
     @JsonProperty("transactionType")
@@ -24,4 +25,8 @@ public class Transaction {
     private CurrencySymbol symbol;
     @JsonProperty("amount")
     private BigDecimal amount;
+    @JsonProperty("price")
+    private BigDecimal price;
+    @JsonProperty("transactionValue")
+    private BigDecimal transactionValue;
 }

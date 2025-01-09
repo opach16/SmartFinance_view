@@ -13,6 +13,8 @@ import java.time.LocalDate;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class CurrencyTransaction {
 
+    @JsonProperty("id")
+    private Long transactionId;
     @JsonProperty("currencySymbol")
     private CurrencySymbol symbol;
     @JsonProperty("transactionType")

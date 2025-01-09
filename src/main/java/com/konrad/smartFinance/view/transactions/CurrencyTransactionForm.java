@@ -17,20 +17,23 @@ public class CurrencyTransactionForm extends FormLayout {
 
     private final CurrencyTransactionService currencyTransactionService = CurrencyTransactionService.getInstance();
     private final CurrencyTransactionLayout currencyTransactionLayout;
-    private final DatePicker datePicker = new DatePicker("Transaction Date");
+    private final TextField transactionId = new TextField("Transaction ID");
+    private final DatePicker transactionDate = new DatePicker("Transaction Date");
     private final ComboBox<CurrencyTransactionType> transactionType = new ComboBox<>("Transaction Type");
     private final TextField amount = new TextField("Amount");
+    private final TextField price = new TextField("Price");
     private final ComboBox<CurrencySymbol> symbol = new ComboBox<>("Symbol");
     private final Button saveButton = new Button("Save");
     private final Button deleteButton = new Button("Delete");
     private final Binder<CurrencyTransaction> binder = new Binder<>(CurrencyTransaction.class);
 
     public CurrencyTransactionForm(CurrencyTransactionLayout currencyTransactionLayout) {
+        transactionId.onEnabledStateChanged(false);
         transactionType.setItems(CurrencyTransactionType.values());
         symbol.setItems(CurrencySymbol.values());
         HorizontalLayout buttons = new HorizontalLayout(saveButton, deleteButton);
         saveButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
-        add(datePicker, transactionType, amount, symbol, buttons);
+        add(transactionId, transactionDate, transactionType, amount, price, symbol, buttons);
         binder.bindInstanceFields(this);
         this.currencyTransactionLayout = currencyTransactionLayout;
         saveButton.addClickListener(e -> {
@@ -56,7 +59,7 @@ public class CurrencyTransactionForm extends FormLayout {
 
     public void setTransaction(CurrencyTransaction transaction) {
         binder.setBean(transaction);
-        datePicker.setValue(transaction.getTransactionDate());
+        transactionDate.setValue(transaction.getTransactionDate());
         transactionType.setValue(transaction.getTransactionType());
         symbol.setValue(transaction.getSymbol());
 

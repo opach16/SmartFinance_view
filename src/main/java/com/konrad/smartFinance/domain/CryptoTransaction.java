@@ -8,12 +8,13 @@ import lombok.Data;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.Objects;
 
 @Data
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class CryptoTransaction {
 
+    @JsonProperty("id")
+    private Long transactionId;
     @JsonProperty("transactionType")
     private CryptoTransactionType transactionType;
     @JsonProperty("cryptocurrencySymbol")
