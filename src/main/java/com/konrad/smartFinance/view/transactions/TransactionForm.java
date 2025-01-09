@@ -34,7 +34,7 @@ public class TransactionForm extends FormLayout {
         symbol.setItems(CurrencySymbol.values());
         HorizontalLayout buttons = new HorizontalLayout(saveButton, deleteButton);
         saveButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
-        add(transactionId, transactionDate, transactionType, name, amount, symbol, price, buttons);
+        add(transactionId, transactionDate, transactionType, name, amount, price, buttons);
         binder.bindInstanceFields(this);
         this.transactionLayout = transactionLayout;
         saveButton.addClickListener(e -> {
