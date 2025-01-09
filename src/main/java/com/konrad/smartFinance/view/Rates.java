@@ -17,8 +17,8 @@ public class Rates extends VerticalLayout {
     private final CryptoService cryptoService = CryptoService.getInstance();
     private final Grid<CurrencyRates> fiatRatesGrid = new Grid<>(CurrencyRates.class);
     private final Grid<CryptoRates> cryptoRatesGrid = new Grid<>(CryptoRates.class);
-    private final Button fiat = new Button("Fiat");
-    private final Button crypto = new Button("Crypto");
+    private final Button currenciesButton = new Button("Currencies");
+    private final Button cryptoButton = new Button("Crypto");
 
     public Rates() {
 
@@ -31,28 +31,27 @@ public class Rates extends VerticalLayout {
         cryptoRatesGrid.setSizeFull();
         cryptoRatesGrid.setVisible(false);
 
-        HorizontalLayout toolbar = new HorizontalLayout(fiat, crypto);
+        HorizontalLayout toolbar = new HorizontalLayout(currenciesButton, cryptoButton);
         toolbar.setAlignItems(Alignment.END);
 
-        VerticalLayout mainContent = new VerticalLayout(fiatRatesGrid, cryptoRatesGrid);
-
+        VerticalLayout mainContent = new VerticalLayout(toolbar, fiatRatesGrid, cryptoRatesGrid);
         mainContent.setSizeFull();
         mainContent.setFlexGrow(1, fiatRatesGrid);
+
+        currenciesButton.addClickListener(event -> {
+            cryptoRatesGrid.setVisible(false);
+            fiatRatesGrid.setVisible(true);
+        });
+
+        cryptoButton.addClickListener(event -> {
+            fiatRatesGrid.setVisible(false);
+            cryptoRatesGrid.setVisible(true);
+        });
 
         setSizeFull();
         setPadding(false);
         setSpacing(false);
 
-        fiat.addClickListener(event -> {
-            cryptoRatesGrid.setVisible(false);
-            fiatRatesGrid.setVisible(true);
-        });
-
-        crypto.addClickListener(event -> {
-            fiatRatesGrid.setVisible(false);
-            cryptoRatesGrid.setVisible(true);
-        });
-
-        add(toolbar, mainContent);
+        add(mainContent);
     }
 }
