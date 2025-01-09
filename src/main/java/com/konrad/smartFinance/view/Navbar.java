@@ -1,5 +1,6 @@
 package com.konrad.smartFinance.view;
 
+import com.konrad.smartFinance.view.transactions.Transactions;
 import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
@@ -19,14 +20,16 @@ public class Navbar extends HorizontalLayout {
         RouterLink transactionsLink = new RouterLink("Transactions", Transactions.class);
         RouterLink currenciesLink = new RouterLink("Currencies", Currencies.class);
         RouterLink cryptoLink = new RouterLink("Crypto", Crypto.class);
+        RouterLink ratesLink = new RouterLink("Rates", Rates.class);
         RouterLink userLink = new RouterLink("User", User.class);
 
         Tab dashboard = new Tab(dashboardLink);
         Tab transactions = new Tab(transactionsLink);
         Tab currencies = new Tab(currenciesLink);
         Tab crypto = new Tab(cryptoLink);
+        Tab rates = new Tab(ratesLink);
         Tab user = new Tab(userLink);
-        Tabs navigationTabs = new Tabs(dashboard, transactions, currencies, crypto, user);
+        Tabs navigationTabs = new Tabs(dashboard, transactions, currencies, crypto, rates, user);
 
         navigation.add(navigationTabs);
         return navigation;
