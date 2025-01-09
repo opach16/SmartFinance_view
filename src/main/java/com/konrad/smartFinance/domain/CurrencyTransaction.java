@@ -2,6 +2,7 @@ package com.konrad.smartFinance.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.konrad.smartFinance.CurrencySymbol;
 import com.konrad.smartFinance.CurrencyTransactionType;
 import lombok.Getter;
 import lombok.Setter;
@@ -15,7 +16,7 @@ import java.time.LocalDate;
 public class CurrencyTransaction {
 
     @JsonProperty("currencySymbol")
-    private String symbol;
+    private CurrencySymbol symbol;
     @JsonProperty("transactionType")
     private CurrencyTransactionType transactionType;
     @JsonProperty("amount")
@@ -24,7 +25,7 @@ public class CurrencyTransaction {
     private BigDecimal price;
     @JsonProperty("transactionDate")
     private LocalDate transactionDate;
-    @JsonProperty("value")
+    @JsonProperty("transactionValue")
     private BigDecimal transactionValue;
     @JsonProperty("currentValue")
     private BigDecimal currentValue;

@@ -31,4 +31,12 @@ public class CurrencyTransactionService {
     public void updateCurrencyTransactions() {
         currencyTransactions = smartFinanceClient.fetchCurrencyTransactions();
     }
+
+    public void save(CurrencyTransaction transaction) {
+        this.currencyTransactions.add(transaction);
+    }
+
+    public void delete(CurrencyTransaction transaction) {
+        this.currencyTransactions.remove(transaction);
+    }
 }
