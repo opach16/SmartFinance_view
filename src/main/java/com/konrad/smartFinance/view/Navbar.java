@@ -16,15 +16,17 @@ public class Navbar extends HorizontalLayout {
         navigation.setAlignItems(FlexComponent.Alignment.CENTER);
 
         RouterLink dashboardLink = new RouterLink("Dashboard", Dashboard.class);
+        RouterLink assetsLink = new RouterLink("Assets", Assets.class);
         RouterLink transactionsLink = new RouterLink("Transactions", Transactions.class);
         RouterLink ratesLink = new RouterLink("Rates", Rates.class);
         RouterLink userLink = new RouterLink("User", User.class);
 
         Tab dashboard = new Tab(dashboardLink);
+        Tab assets = new Tab(assetsLink);
         Tab transactions = new Tab(transactionsLink);
         Tab rates = new Tab(ratesLink);
         Tab user = new Tab(userLink);
-        Tabs navigationTabs = new Tabs(dashboard, transactions, rates, user);
+        Tabs navigationTabs = new Tabs(dashboard, assets, transactions, rates, user);
 
         navigation.add(navigationTabs);
         return navigation;

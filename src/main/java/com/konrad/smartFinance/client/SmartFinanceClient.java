@@ -55,11 +55,20 @@ public class SmartFinanceClient {
     }
 
     public Set<Transaction> fetchTransactions() {
-        URI url = UriComponentsBuilder.fromUriString("http://localhost:8080/api/v1/accounts/4/transactions")
+        URI url = UriComponentsBuilder.fromUriString("http://localhost:8080/api/v1/accounts/1/transactions")
                 .build()
                 .encode()
                 .toUri();
         Transaction[] response = restTemplate.getForObject(url, Transaction[].class);
         return response != null ? new HashSet<Transaction>(Arrays.asList(response)) : Collections.emptySet();
+    }
+
+    public Set<Asset> fetchAssets() {
+        URI url = UriComponentsBuilder.fromUriString("http://localhost:8080/api/v1/assets")
+                .build()
+                .encode()
+                .toUri();
+        Asset[] response = restTemplate.getForObject(url, Asset[].class);
+        return response != null ? new HashSet<>(Arrays.asList(response)) : Collections.emptySet();
     }
 }
