@@ -1,5 +1,8 @@
-package com.konrad.smartFinance.view.transactions;
+package com.konrad.smartFinance.view;
 
+import com.konrad.smartFinance.view.transactions.CryptoTransactionLayout;
+import com.konrad.smartFinance.view.transactions.CurrencyTransactionLayout;
+import com.konrad.smartFinance.view.transactions.TransactionLayout;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -17,32 +20,41 @@ public class Transactions extends VerticalLayout {
 
     public Transactions() {
 
-        HorizontalLayout toolbar = new HorizontalLayout(debitButton, currencyButton, cryptoButton);
-        toolbar.setAlignItems(Alignment.END);
-
         transactionLayout.setVisible(true);
         currencyTransactionLayout.setVisible(false);
         cryptoTransactionLayout.setVisible(false);
-        VerticalLayout mainView = new VerticalLayout(transactionLayout, currencyTransactionLayout, cryptoTransactionLayout);
+
+        HorizontalLayout toolbar = new HorizontalLayout(debitButton, currencyButton, cryptoButton);
+        toolbar.setAlignItems(Alignment.END);
+
+        VerticalLayout mainContent = new VerticalLayout(toolbar, transactionLayout, currencyTransactionLayout, cryptoTransactionLayout);
+        mainContent.setSizeFull();
 
         debitButton.addClickListener(event -> {
             transactionLayout.setVisible(true);
             currencyTransactionLayout.setVisible(false);
             cryptoTransactionLayout.setVisible(false);
+            transactionLayout.refresh();
         });
 
         currencyButton.addClickListener(event -> {
             transactionLayout.setVisible(false);
             currencyTransactionLayout.setVisible(true);
             cryptoTransactionLayout.setVisible(false);
+            currencyTransactionLayout.refresh();
         });
 
         cryptoButton.addClickListener(event -> {
             transactionLayout.setVisible(false);
             currencyTransactionLayout.setVisible(false);
             cryptoTransactionLayout.setVisible(true);
+            currencyTransactionLayout.refresh();
         });
 
-        add(toolbar, mainView);
+        setSizeFull();
+        setPadding(false);
+        setSpacing(false);
+
+        add(mainContent);
     }
 }
