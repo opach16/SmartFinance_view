@@ -1,4 +1,4 @@
-package com.konrad.smartFinance.view;
+package com.konrad.smartFinance.view.transactions;
 
 import com.konrad.smartFinance.AccountTransactionType;
 import com.konrad.smartFinance.CurrencySymbol;
@@ -16,7 +16,7 @@ import com.vaadin.flow.data.binder.Binder;
 public class TransactionForm extends FormLayout {
 
     private final TransactionService transactionService = TransactionService.getInstance();
-    private final Transactions transactions;
+    private final TransactionLayout transactionLayout;
     private final DatePicker datePicker = new DatePicker("Transaction Date");
     private final ComboBox<AccountTransactionType> transactionType = new ComboBox<>("Transaction Type");
     private final TextField name = new TextField("Name");
@@ -26,14 +26,14 @@ public class TransactionForm extends FormLayout {
     private final Button deleteButton = new Button("Delete");
     private final Binder<Transaction> binder = new Binder<>(Transaction.class);
 
-    public TransactionForm(Transactions transactions) {
+    public TransactionForm(TransactionLayout transactionLayout) {
         transactionType.setItems(AccountTransactionType.values());
         symbol.setItems(CurrencySymbol.values());
         HorizontalLayout buttons = new HorizontalLayout(saveButton, deleteButton);
         saveButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
         add(datePicker, transactionType, name, amount, symbol, buttons);
         binder.bindInstanceFields(this);
-        this.transactions = transactions;
+        this.transactionLayout = transactionLayout;
         saveButton.addClickListener(e -> {
         });
         deleteButton.addClickListener(e -> {
@@ -44,14 +44,14 @@ public class TransactionForm extends FormLayout {
     public void save() {
         Transaction transaction = binder.getBean();
         transactionService.save(transaction);
-        transactions.refresh();
+        transactionLayout.refresh();
         setTransaction(null);
     }
 
     public void delete() {
         Transaction transaction = binder.getBean();
         transactionService.delete(transaction);
-        transactions.refresh();
+        transactionLayout.refresh();
         setTransaction(null);
     }
 

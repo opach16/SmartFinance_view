@@ -1,4 +1,4 @@
-package com.konrad.smartFinance.view;
+package com.konrad.smartFinance.view.transactions;
 
 import com.konrad.smartFinance.domain.Transaction;
 import com.konrad.smartFinance.service.TransactionService;
@@ -8,18 +8,16 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.value.ValueChangeMode;
-import com.vaadin.flow.router.Route;
 
-@Route("transactions")
-public class Transactions extends VerticalLayout {
+public class TransactionLayout extends VerticalLayout {
 
-    private TransactionService transactionService = TransactionService.getInstance();
-    private Grid<Transaction> grid = new Grid<>(Transaction.class);
-    private TextField filter = new TextField();
-    private Button addTransaction = new Button("Add Transaction");
-    private TransactionForm form = new TransactionForm(this);
+    private final TransactionService transactionService = TransactionService.getInstance();
+    private final Grid<Transaction> grid = new Grid<>(Transaction.class);
+    private final TextField filter = new TextField();
+    private final Button addTransactionButton = new Button("Add transaction");
+    private final TransactionForm form = new TransactionForm(this);
 
-    public Transactions() {
+    public TransactionLayout() {
         filter.setPlaceholder("Filter");
         filter.setClearButtonVisible(true);
         filter.setValueChangeMode(ValueChangeMode.EAGER);
@@ -31,7 +29,7 @@ public class Transactions extends VerticalLayout {
 
         form.setVisible(false);
 
-        HorizontalLayout toolbar = new HorizontalLayout(filter, addTransaction);
+        HorizontalLayout toolbar = new HorizontalLayout(filter, addTransactionButton);
         HorizontalLayout mainContent = new HorizontalLayout(grid, form);
 
         mainContent.setSizeFull();
@@ -41,7 +39,7 @@ public class Transactions extends VerticalLayout {
         setPadding(false);
         setSpacing(false);
 
-        addTransaction.addClickListener(event -> {
+        addTransactionButton.addClickListener(event -> {
             form.setVisible(true);
         });
 
