@@ -71,4 +71,42 @@ public class SmartFinanceClient {
         Asset[] response = restTemplate.getForObject(url, Asset[].class);
         return response != null ? new HashSet<>(Arrays.asList(response)) : Collections.emptySet();
     }
+
+    public void addCurrencyTransactionWithParameters(CurrencyTransaction currencyTransaction) {
+        URI url = UriComponentsBuilder.fromUriString("http://localhost:8080/api/v1/currency-transactions")
+                .queryParam("userId", 1)
+                .queryParam("transactionType", currencyTransaction.getTransactionType())
+                .queryParam("currency", currencyTransaction.getSymbol())
+                .queryParam("amount", currencyTransaction.getAmount())
+                .queryParam("price", currencyTransaction.getPrice())
+                .queryParam("transactionDate", currencyTransaction.getTransactionDate())
+                .build()
+                .encode()
+                .toUri();
+        restTemplate.postForObject(url, null, CurrencyTransaction.class);
+    }
+
+    public void updateCurrencyTransactionWithParams(CurrencyTransaction currencyTransaction) {
+        URI url = UriComponentsBuilder.fromUriString("http://localhost:8080/api/v1/currency-transactions")
+                .queryParam("userId", 1)
+                .queryParam("transactionId", currencyTransaction.getTransactionId())
+                .queryParam("transactionType", currencyTransaction.getTransactionType())
+                .queryParam("currency", currencyTransaction.getSymbol())
+                .queryParam("amount", currencyTransaction.getAmount())
+                .queryParam("price", currencyTransaction.getPrice())
+                .queryParam("transactionDate", currencyTransaction.getTransactionDate())
+                .build()
+                .encode()
+                .toUri();
+        restTemplate.put(url, null);
+    }
+
+    public void deleteCurrencyTransactionWithParams(CurrencyTransaction currencyTransaction) {
+        URI url = UriComponentsBuilder.fromUriString("http://localhost:8080/api/v1/currency-transactions")
+                .queryParam("transactionId", currencyTransaction.getTransactionId())
+                .build()
+                .encode()
+                .toUri();
+        restTemplate.delete(url);
+    }
 }

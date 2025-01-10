@@ -31,6 +31,7 @@ public class Transactions extends VerticalLayout {
         mainContent.setSizeFull();
 
         debitButton.addClickListener(event -> {
+            transactionLayout.refresh();
             transactionLayout.setVisible(true);
             currencyTransactionLayout.setVisible(false);
             cryptoTransactionLayout.setVisible(false);
@@ -38,6 +39,7 @@ public class Transactions extends VerticalLayout {
         });
 
         currencyButton.addClickListener(event -> {
+            currencyTransactionLayout.refresh();
             transactionLayout.setVisible(false);
             currencyTransactionLayout.setVisible(true);
             cryptoTransactionLayout.setVisible(false);
@@ -45,6 +47,7 @@ public class Transactions extends VerticalLayout {
         });
 
         cryptoButton.addClickListener(event -> {
+            cryptoTransactionLayout.refresh();
             transactionLayout.setVisible(false);
             currencyTransactionLayout.setVisible(false);
             cryptoTransactionLayout.setVisible(true);

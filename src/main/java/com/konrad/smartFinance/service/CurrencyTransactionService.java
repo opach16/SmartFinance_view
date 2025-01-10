@@ -33,10 +33,16 @@ public class CurrencyTransactionService {
     }
 
     public void save(CurrencyTransaction transaction) {
-        this.currencyTransactions.add(transaction);
+        if (transaction.getTransactionId() == 0) {
+            smartFinanceClient.addCurrencyTransactionWithParameters(transaction);
+        } else {
+            smartFinanceClient.updateCurrencyTransactionWithParams(transaction);
+        }
     }
 
     public void delete(CurrencyTransaction transaction) {
-        this.currencyTransactions.remove(transaction);
+        if (transaction.getTransactionId() != 0) {
+            smartFinanceClient.deleteCurrencyTransactionWithParams(transaction);
+        }
     }
 }

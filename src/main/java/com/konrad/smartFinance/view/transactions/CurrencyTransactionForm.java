@@ -10,8 +10,11 @@ import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
+import com.vaadin.flow.component.textfield.NumberField;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.Binder;
+
+import java.math.BigDecimal;
 
 public class CurrencyTransactionForm extends FormLayout {
 
@@ -20,8 +23,8 @@ public class CurrencyTransactionForm extends FormLayout {
     private final TextField transactionId = new TextField("Transaction ID");
     private final DatePicker transactionDate = new DatePicker("Transaction Date");
     private final ComboBox<CurrencyTransactionType> transactionType = new ComboBox<>("Transaction Type");
-    private final TextField amount = new TextField("Amount");
-    private final TextField price = new TextField("Price");
+    private final NumberField amount = new NumberField("Amount");
+    private final NumberField price = new NumberField("Price");
     private final ComboBox<CurrencySymbol> symbol = new ComboBox<>("Symbol");
     private final Button saveButton = new Button("Save");
     private final Button deleteButton = new Button("Delete");
@@ -36,15 +39,19 @@ public class CurrencyTransactionForm extends FormLayout {
         add(transactionId, transactionDate, transactionType, amount, price, symbol, buttons);
         binder.bindInstanceFields(this);
         this.currencyTransactionLayout = currencyTransactionLayout;
-        saveButton.addClickListener(e -> {
-        });
-        deleteButton.addClickListener(e -> {
-        });
+        saveButton.addClickListener(e -> save());
+        deleteButton.addClickListener(e -> delete());
         setWidth("50%");
     }
 
     public void save() {
-        CurrencyTransaction transaction = binder.getBean();
+        CurrencyTransaction transaction = new CurrencyTransaction();
+        transaction.setTransactionDate(transactionDate.getValue());
+        transaction.setTransactionType(transactionType.getValue());
+        transaction.setSymbol(symbol.getValue());
+        transaction.setAmount(BigDecimal.valueOf(amount.getValue()));
+        transaction.setPrice(BigDecimal.valueOf(price.getValue()));
+        transaction.setTransactionId(transactionId.getValue().isBlank() ? 0L : Long.parseLong(transactionId.getValue()));
         currencyTransactionService.save(transaction);
         currencyTransactionLayout.refresh();
         setTransaction(null);
@@ -59,9 +66,6 @@ public class CurrencyTransactionForm extends FormLayout {
 
     public void setTransaction(CurrencyTransaction transaction) {
         binder.setBean(transaction);
-        transactionDate.setValue(transaction.getTransactionDate());
-        transactionType.setValue(transaction.getTransactionType());
-        symbol.setValue(transaction.getSymbol());
 
         if (transaction == null) {
             setVisible(false);
