@@ -109,4 +109,42 @@ public class SmartFinanceClient {
                 .toUri();
         restTemplate.delete(url);
     }
+
+    public void addCryptoTransactionWithParams(CryptoTransaction cryptoTransaction) {
+        URI url = UriComponentsBuilder.fromUriString("http://localhost:8080/api/v1/crypto-transactions")
+                .queryParam("userId", 1)
+                .queryParam("transactionType", cryptoTransaction.getTransactionType())
+                .queryParam("symbol", cryptoTransaction.getSymbol())
+                .queryParam("amount", cryptoTransaction.getAmount())
+                .queryParam("price", cryptoTransaction.getPrice())
+                .queryParam("transactionDate", cryptoTransaction.getTransactionDate())
+                .build()
+                .encode()
+                .toUri();
+        restTemplate.postForObject(url, null, CryptoTransaction.class);
+    }
+
+    public void updateCryptoTransactionWithParams(CryptoTransaction cryptoTransaction) {
+        URI url = UriComponentsBuilder.fromUriString("http://localhost:8080/api/v1/crypto-transactions")
+                .queryParam("userId", 1)
+                .queryParam("transactionId", cryptoTransaction.getTransactionId())
+                .queryParam("transactionType", cryptoTransaction.getTransactionType())
+                .queryParam("symbol", cryptoTransaction.getSymbol())
+                .queryParam("amount", cryptoTransaction.getAmount())
+                .queryParam("price", cryptoTransaction.getPrice())
+                .queryParam("transactionDate", cryptoTransaction.getTransactionDate())
+                .build()
+                .encode()
+                .toUri();
+        restTemplate.put(url, null);
+    }
+
+    public void deleteCryptoTransactionWithParams(CryptoTransaction cryptoTransaction) {
+        URI url = UriComponentsBuilder.fromUriString("http://localhost:8080/api/v1/crypto-transactions")
+                .queryParam("transactionId", cryptoTransaction.getTransactionId())
+                .build()
+                .encode()
+                .toUri();
+        restTemplate.delete(url);
+    }
 }

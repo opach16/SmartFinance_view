@@ -33,10 +33,16 @@ public class CryptoTransactionService {
     }
 
     public void save(CryptoTransaction transaction) {
-        this.cryptoTransactions.add(transaction);
+        if (transaction.getTransactionId() == 0) {
+           smartFinanceClient.addCryptoTransactionWithParams(transaction);
+        } else {
+            smartFinanceClient.updateCryptoTransactionWithParams(transaction);
+        }
     }
 
     public void delete(CryptoTransaction transaction) {
-        this.cryptoTransactions.remove(transaction);
+        if (transaction.getTransactionId() != 0) {
+            smartFinanceClient.deleteCryptoTransactionWithParams(transaction);
+        }
     }
 }

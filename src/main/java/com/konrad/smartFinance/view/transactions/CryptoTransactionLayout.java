@@ -40,6 +40,7 @@ public class CryptoTransactionLayout extends VerticalLayout {
         setSpacing(false);
 
         addTransactionButton.addClickListener(event -> {
+            form.setTransaction(new CryptoTransaction());
             form.setVisible(true);
         });
 
@@ -47,6 +48,7 @@ public class CryptoTransactionLayout extends VerticalLayout {
     }
 
     public void refresh() {
+        cryptoTransactionService.updateCryptoTransactions();
         grid.setItems(cryptoTransactionService.getCryptoTransactions());
     }
 }
