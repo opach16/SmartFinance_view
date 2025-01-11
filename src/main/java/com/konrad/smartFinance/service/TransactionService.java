@@ -13,7 +13,6 @@ import java.util.logging.Logger;
 @Service
 public class TransactionService {
 
-    Logger logger = Logger.getLogger(TransactionService.class.getName());
     private final SmartFinanceClient smartFinanceClient;
     private static TransactionService transactionService;
     private Set<Transaction> transactions;
@@ -30,18 +29,21 @@ public class TransactionService {
         return transactionService;
     }
 
-    //    @Scheduled(fixedRate = 20000)
     public void updateTransactions() {
         transactions = smartFinanceClient.fetchTransactions();
-        System.out.println("Transactions fetched: " + transactions.size());
-        logger.info("Fetched " + transactions.size() + " transactions");
     }
 
     public void save(Transaction transaction) {
-        this.transactions.add(transaction);
+        if (transaction.getTransactionId() == 0) {
+            smartFinanceClient.addTransactionWithParams(transaction);
+        } else {
+            smartFinanceClient.updateTransactionWithParams(transaction);
+        }
     }
 
     public void delete(Transaction transaction) {
-        this.transactions.remove(transaction);
+        if (transaction.getTransactionId() != 0) {
+            smartFinanceClient.deleteTransactionWithParams(transaction);
+        }
     }
 }

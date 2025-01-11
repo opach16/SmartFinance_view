@@ -10,8 +10,12 @@ import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
+import com.vaadin.flow.component.textfield.NumberField;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.Binder;
+
+import java.math.BigDecimal;
+import java.time.LocalDate;
 
 public class TransactionForm extends FormLayout {
 
@@ -21,8 +25,8 @@ public class TransactionForm extends FormLayout {
     private final DatePicker transactionDate = new DatePicker("Transaction Date");
     private final ComboBox<AccountTransactionType> transactionType = new ComboBox<>("Transaction Type");
     private final TextField name = new TextField("Name");
-    private final TextField amount = new TextField("Amount");
-    private final TextField price = new TextField("Price");
+    private final NumberField amount = new NumberField("Amount");
+    private final NumberField price = new NumberField("Price");
     private final ComboBox<CurrencySymbol> symbol = new ComboBox<>("Symbol");
     private final Button saveButton = new Button("Save");
     private final Button deleteButton = new Button("Delete");
@@ -30,6 +34,9 @@ public class TransactionForm extends FormLayout {
 
     public TransactionForm(TransactionLayout transactionLayout) {
         transactionId.onEnabledStateChanged(false);
+        transactionId.setVisible(false);
+        amount.setVisible(false);
+        price.setVisible(false);
         transactionType.setItems(AccountTransactionType.values());
         symbol.setItems(CurrencySymbol.values());
         HorizontalLayout buttons = new HorizontalLayout(saveButton, deleteButton);
@@ -37,15 +44,35 @@ public class TransactionForm extends FormLayout {
         add(transactionId, transactionDate, transactionType, name, amount, price, buttons);
         binder.bindInstanceFields(this);
         this.transactionLayout = transactionLayout;
-        saveButton.addClickListener(e -> {
+        transactionType.addValueChangeListener(event -> {
+            AccountTransactionType type = event.getValue();
+            if (type == AccountTransactionType.INCOME) {
+                amount.setValue(1.0);
+                amount.setVisible(false);
+                price.setLabel("Value");
+                price.setVisible(true);
+            } else if (type == AccountTransactionType.EXPENSE) {
+                amount.clear();
+                amount.setVisible(true);
+                price.setLabel("Price");
+                price.setVisible(true);
+            }
         });
-        deleteButton.addClickListener(e -> {
-        });
+        saveButton.addClickListener(e -> save());
+        deleteButton.addClickListener(e -> delete());
         setWidth("50%");
     }
 
     public void save() {
-        Transaction transaction = binder.getBean();
+        Transaction transaction = Transaction.builder()
+                .transactionDate(transactionDate.getValue())
+                .transactionType(transactionType.getValue())
+                .name(name.getValue())
+                .symbol(symbol.getValue())
+                .amount(BigDecimal.valueOf(amount.getValue()))
+                .price(BigDecimal.valueOf(price.getValue()))
+                .transactionId(transactionId.getValue().isBlank() ? 0L : Long.parseLong(transactionId.getValue()))
+                .build();
         transactionService.save(transaction);
         transactionLayout.refresh();
         setTransaction(null);
@@ -60,9 +87,6 @@ public class TransactionForm extends FormLayout {
 
     public void setTransaction(Transaction transaction) {
         binder.setBean(transaction);
-        transactionDate.setValue(transaction.getTransactionDate());
-        transactionType.setValue(transaction.getTransactionType());
-        symbol.setValue(transaction.getSymbol());
 
         if (transaction == null) {
             setVisible(false);

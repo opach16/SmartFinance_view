@@ -9,6 +9,8 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.value.ValueChangeMode;
 
+import java.time.LocalDate;
+
 public class TransactionLayout extends VerticalLayout {
 
     private final TransactionService transactionService = TransactionService.getInstance();
@@ -40,7 +42,7 @@ public class TransactionLayout extends VerticalLayout {
         setSpacing(false);
 
         addTransactionButton.addClickListener(event -> {
-            form.setTransaction(new Transaction());
+            form.setTransaction(Transaction.builder().transactionDate(LocalDate.now()).build());
             form.setVisible(true);
         });
 
@@ -48,6 +50,7 @@ public class TransactionLayout extends VerticalLayout {
     }
 
     public void refresh() {
+        transactionService.updateTransactions();
         grid.setItems(transactionService.getTransactions());
     }
 }
