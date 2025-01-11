@@ -4,6 +4,7 @@ import com.konrad.smartFinance.domain.CryptoRates;
 import com.konrad.smartFinance.domain.CurrencyRates;
 import com.konrad.smartFinance.service.CryptoService;
 import com.konrad.smartFinance.service.CurrencyService;
+import com.vaadin.flow.component.AttachEvent;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
@@ -39,11 +40,13 @@ public class Rates extends VerticalLayout {
         mainContent.setFlexGrow(1, fiatRatesGrid);
 
         currenciesButton.addClickListener(event -> {
+            fiatRatesGrid.setItems(currencyService.getCurrencyRates());
             cryptoRatesGrid.setVisible(false);
             fiatRatesGrid.setVisible(true);
         });
 
         cryptoButton.addClickListener(event -> {
+            cryptoRatesGrid.setItems(cryptoService.getCryptoRates());
             fiatRatesGrid.setVisible(false);
             cryptoRatesGrid.setVisible(true);
         });
@@ -53,5 +56,16 @@ public class Rates extends VerticalLayout {
         setSpacing(false);
 
         add(mainContent);
+    }
+
+    @Override
+    protected void onAttach(AttachEvent attachEvent) {
+        super.onAttach(attachEvent);
+        refresh();
+    }
+
+    public void refresh() {
+        fiatRatesGrid.setItems(currencyService.getCurrencyRates());
+        cryptoRatesGrid.setItems(cryptoService.getCryptoRates());
     }
 }

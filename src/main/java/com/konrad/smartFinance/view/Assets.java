@@ -2,6 +2,7 @@ package com.konrad.smartFinance.view;
 
 import com.konrad.smartFinance.domain.Asset;
 import com.konrad.smartFinance.service.AssetsService;
+import com.vaadin.flow.component.AttachEvent;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
@@ -33,5 +34,16 @@ public class Assets extends VerticalLayout {
         setSpacing(false);
 
         add(mainContent);
+    }
+
+    @Override
+    protected void onAttach(AttachEvent attachEvent) {
+        super.onAttach(attachEvent);
+        refresh();
+    }
+
+    public void refresh() {
+        assetsService.updateAssets();
+        grid.setItems(assetsService.getAssets());
     }
 }
