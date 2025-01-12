@@ -17,9 +17,10 @@ public class Assets extends VerticalLayout {
     private final TextField filter = new TextField();
 
     public Assets() {
-        filter.setPlaceholder("Filter");
+        filter.setPlaceholder("Filter by symbol..");
         filter.setClearButtonVisible(true);
         filter.setValueChangeMode(ValueChangeMode.EAGER);
+        filter.addValueChangeListener(event -> update());
 
         grid.setColumns("assetId", "assetType", "symbol", "amount", "currentValue");
         grid.setItems(assetsService.getAssets());
@@ -45,5 +46,9 @@ public class Assets extends VerticalLayout {
     public void refresh() {
         assetsService.updateAssets();
         grid.setItems(assetsService.getAssets());
+    }
+
+    public void update() {
+        grid.setItems(assetsService.findBySymbol(filter.getValue()));
     }
 }

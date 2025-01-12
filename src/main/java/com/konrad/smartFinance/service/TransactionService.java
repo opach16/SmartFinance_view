@@ -8,6 +8,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.Set;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 @Getter
 @Service
@@ -31,6 +32,12 @@ public class TransactionService {
 
     public void updateTransactions() {
         transactions = smartFinanceClient.fetchTransactions();
+    }
+
+    public Set<Transaction> findByName(String name) {
+        return transactions.stream()
+                .filter(transaction -> transaction.getName().toLowerCase().contains(name.toLowerCase()))
+                .collect(Collectors.toSet());
     }
 
     public void save(Transaction transaction) {

@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Getter
 @Service
@@ -30,6 +31,12 @@ public class CryptoTransactionService {
 
     public void updateCryptoTransactions() {
         cryptoTransactions = smartFinanceClient.fetchCryptoTransactions();
+    }
+
+    public Set<CryptoTransaction> findBySymbol(String symbol) {
+        return cryptoTransactions.stream()
+                .filter(transaction -> transaction.getSymbol().toString().toLowerCase().contains(symbol.toLowerCase()))
+                .collect(Collectors.toSet());
     }
 
     public void save(CryptoTransaction transaction) {

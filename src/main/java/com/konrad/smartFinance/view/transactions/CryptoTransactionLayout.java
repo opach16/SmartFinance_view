@@ -18,9 +18,10 @@ public class CryptoTransactionLayout extends VerticalLayout {
     private final CryptoTransactionForm form = new CryptoTransactionForm(this);
 
     public CryptoTransactionLayout() {
-        filter.setPlaceholder("Filter");
+        filter.setPlaceholder("Filter by symbol..");
         filter.setClearButtonVisible(true);
         filter.setValueChangeMode(ValueChangeMode.EAGER);
+        filter.addValueChangeListener(event -> update());
 
         grid.setColumns("transactionId", "transactionDate", "transactionType", "name", "symbol", "amount", "price", "transactionValue", "currentValue");
         grid.setSizeFull();
@@ -50,5 +51,9 @@ public class CryptoTransactionLayout extends VerticalLayout {
     public void refresh() {
         cryptoTransactionService.updateCryptoTransactions();
         grid.setItems(cryptoTransactionService.getCryptoTransactions());
+    }
+
+    public void update() {
+        grid.setItems(cryptoTransactionService.findBySymbol(filter.getValue()));
     }
 }

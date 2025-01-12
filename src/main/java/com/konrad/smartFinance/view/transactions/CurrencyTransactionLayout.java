@@ -11,16 +11,17 @@ import com.vaadin.flow.data.value.ValueChangeMode;
 
 public class CurrencyTransactionLayout extends VerticalLayout {
 
-    private final CurrencyTransactionService cryptoTransactionService = CurrencyTransactionService.getInstance();
+    private final CurrencyTransactionService currencyTransactionService = CurrencyTransactionService.getInstance();
     private final Grid<CurrencyTransaction> grid = new Grid<>(CurrencyTransaction.class);
     private final TextField filter = new TextField();
     private final Button addTransactionButton = new Button("Add transaction");
     private final CurrencyTransactionForm form = new CurrencyTransactionForm(this);
 
     public CurrencyTransactionLayout() {
-        filter.setPlaceholder("Filter");
+        filter.setPlaceholder("Filter by symbol..");
         filter.setClearButtonVisible(true);
         filter.setValueChangeMode(ValueChangeMode.EAGER);
+        filter.addValueChangeListener(event -> update());
 
         grid.setColumns("transactionId", "transactionDate", "transactionType", "symbol", "amount", "price", "transactionValue", "currentValue");
         grid.setSizeFull();
@@ -48,7 +49,11 @@ public class CurrencyTransactionLayout extends VerticalLayout {
     }
 
     public void refresh() {
-        cryptoTransactionService.updateCurrencyTransactions();
-        grid.setItems(cryptoTransactionService.getCurrencyTransactions());
+        currencyTransactionService.updateCurrencyTransactions();
+        grid.setItems(currencyTransactionService.getCurrencyTransactions());
+    }
+
+    public void update() {
+        grid.setItems(currencyTransactionService.findBySymbol(filter.getValue()));
     }
 }

@@ -20,9 +20,10 @@ public class TransactionLayout extends VerticalLayout {
     private final TransactionForm form = new TransactionForm(this);
 
     public TransactionLayout() {
-        filter.setPlaceholder("Filter");
+        filter.setPlaceholder("Filter by name..");
         filter.setClearButtonVisible(true);
         filter.setValueChangeMode(ValueChangeMode.EAGER);
+        filter.addValueChangeListener(event -> update());
 
         grid.setColumns("transactionId", "transactionDate", "transactionType", "name", "amount", "price", "symbol", "transactionValue");
         grid.setSizeFull();
@@ -52,5 +53,9 @@ public class TransactionLayout extends VerticalLayout {
     public void refresh() {
         transactionService.updateTransactions();
         grid.setItems(transactionService.getTransactions());
+    }
+
+    public void update() {
+        grid.setItems(transactionService.findByName(filter.getValue()));
     }
 }

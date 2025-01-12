@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Getter
 @Service
@@ -30,5 +31,11 @@ public class AssetsService {
 
     public void updateAssets() {
         assets = smartFinanceClient.fetchAssets();
+    }
+
+    public Set<Asset> findBySymbol(String symbol) {
+        return assets.stream()
+                .filter(asset -> asset.getSymbol().toLowerCase().contains(symbol.toLowerCase()))
+                .collect(Collectors.toSet());
     }
 }
