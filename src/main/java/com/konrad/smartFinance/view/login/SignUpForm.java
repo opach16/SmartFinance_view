@@ -80,25 +80,29 @@ public class SignUpForm extends FormLayout {
                     .setPosition(Notification.Position.BOTTOM_CENTER);
             return;
         }
-        if (password.getValue().equals(confirmPassword.getValue())) {
-            UserRegistration registration = binder.getBean();
-            try {
-                userService.save(registration);
-                binder.setBean(new UserRegistration(new User()));
-                confirmPassword.clear();
-                Notification.show("User has been successfully saved")
+        if (binder.validate().isOk()) {
+            if (password.getValue().equals(confirmPassword.getValue())) {
+                UserRegistration registration = binder.getBean();
+                try {
+                    userService.save(registration);
+                    binder.setBean(new UserRegistration(new User()));
+                    confirmPassword.clear();
+                    Notification.show("User has been successfully saved")
+                            .setPosition(Notification.Position.BOTTOM_CENTER);
+                } catch (Exception e) {
+                    Notification.show(e.getMessage());
+                    binder.setBean(new UserRegistration(new User()));
+                    confirmPassword.clear();
+                }
+            } else {
+                Notification.show("Passwords do not match")
                         .setPosition(Notification.Position.BOTTOM_CENTER);
-            } catch (Exception e) {
-                Notification.show(e.getMessage());
-                binder.setBean(new UserRegistration(new User()));
+                password.clear();
                 confirmPassword.clear();
+                password.focus();
             }
         } else {
-            Notification.show("Passwords do not match")
-                    .setPosition(Notification.Position.BOTTOM_CENTER);
-            password.clear();
-            confirmPassword.clear();
-            password.focus();
+            Notification.show("Fill all fields").setPosition(Notification.Position.BOTTOM_CENTER);
         }
     }
 }
