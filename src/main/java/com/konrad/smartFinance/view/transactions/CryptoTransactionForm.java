@@ -9,12 +9,12 @@ import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.formlayout.FormLayout;
+import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.textfield.NumberField;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.Binder;
-
-import java.math.BigDecimal;
+import com.vaadin.flow.data.converter.DoubleToBigDecimalConverter;
 
 public class CryptoTransactionForm extends FormLayout {
 
@@ -31,38 +31,67 @@ public class CryptoTransactionForm extends FormLayout {
     private final Binder<CryptoTransaction> binder = new Binder<>(CryptoTransaction.class);
 
     public CryptoTransactionForm(CryptoTransactionLayout cryptoTransactionLayout) {
+        this.cryptoTransactionLayout = cryptoTransactionLayout;
         transactionId.onEnabledStateChanged(false);
+        transactionId.setVisible(false);
         transactionType.setItems(CryptoTransactionType.values());
         symbol.setItems(CryptoSymbol.values());
-        HorizontalLayout buttons = new HorizontalLayout(saveButton, deleteButton);
         saveButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
-        add(transactionId, transactionDate, transactionType, amount, price, symbol, buttons);
+
+        HorizontalLayout buttons = new HorizontalLayout(saveButton, deleteButton);
         binder.bindInstanceFields(this);
-        this.cryptoTransactionLayout = cryptoTransactionLayout;
         saveButton.addClickListener(e -> save());
         deleteButton.addClickListener(e -> delete());
+
+        binder.forField(transactionDate)
+                .asRequired("Transaction date is required")
+                .bind(CryptoTransaction::getTransactionDate, CryptoTransaction::setTransactionDate);
+
+        binder.forField(transactionType)
+                .asRequired("Transaction type is required")
+                .bind(CryptoTransaction::getTransactionType, CryptoTransaction::setTransactionType);
+
+        binder.forField(symbol)
+                .asRequired("Symbol is required")
+                .bind(CryptoTransaction::getSymbol, CryptoTransaction::setSymbol);
+
+        binder.forField(price)
+                .asRequired("Price/Value is required")
+                .withConverter(new DoubleToBigDecimalConverter())
+                .bind(CryptoTransaction::getPrice, CryptoTransaction::setPrice);
+
+        binder.forField(amount)
+                .asRequired("Amount is required")
+                .withConverter(new DoubleToBigDecimalConverter())
+                .bind(CryptoTransaction::getAmount, CryptoTransaction::setAmount);
+
         setWidth("50%");
+        add(transactionId, transactionDate, transactionType, amount, price, symbol, buttons);
     }
 
     public void save() {
-        CryptoTransaction transaction = CryptoTransaction.builder()
-                .transactionDate(transactionDate.getValue())
-                .transactionType(transactionType.getValue())
-                .symbol(symbol.getValue())
-                .amount(BigDecimal.valueOf(amount.getValue()))
-                .price(BigDecimal.valueOf(price.getValue()))
-                .transactionId(transactionId.getValue().isBlank() ? 0L : Long.parseLong(transactionId.getValue()))
-                .build();
-        cryptoTransactionService.save(transaction);
-        cryptoTransactionLayout.refresh();
-        setTransaction(null);
+        if (binder.validate().isOk()) {
+            try {
+                cryptoTransactionService.save(binder.getBean());
+                cryptoTransactionLayout.refresh();
+                setTransaction(null);
+            } catch (Exception e) {
+                Notification.show(e.getMessage()).setPosition(Notification.Position.BOTTOM_CENTER);
+            }
+        } else {
+            Notification.show("Please fill all fields").setPosition(Notification.Position.BOTTOM_CENTER);
+        }
     }
 
     public void delete() {
-        CryptoTransaction transaction = binder.getBean();
-        cryptoTransactionService.delete(transaction);
-        cryptoTransactionLayout.refresh();
-        setTransaction(null);
+        try {
+            CryptoTransaction transaction = binder.getBean();
+            cryptoTransactionService.delete(transaction);
+            cryptoTransactionLayout.refresh();
+            setTransaction(null);
+        } catch (Exception e) {
+            Notification.show(e.getMessage()).setPosition(Notification.Position.BOTTOM_CENTER);
+        }
     }
 
     public void setTransaction(CryptoTransaction transaction) {

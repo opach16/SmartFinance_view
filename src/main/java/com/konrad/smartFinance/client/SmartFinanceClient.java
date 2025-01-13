@@ -112,33 +112,20 @@ public class SmartFinanceClient {
         restTemplate.delete(url);
     }
 
-    public void addCryptoTransactionWithParams(CryptoTransaction cryptoTransaction) {
-        URI url = UriComponentsBuilder.fromUriString("http://localhost:8080/api/v1/crypto-transactions")
-                .queryParam("userId", 1)
-                .queryParam("transactionType", cryptoTransaction.getTransactionType())
-                .queryParam("symbol", cryptoTransaction.getSymbol())
-                .queryParam("amount", cryptoTransaction.getAmount())
-                .queryParam("price", cryptoTransaction.getPrice())
-                .queryParam("transactionDate", cryptoTransaction.getTransactionDate())
+    public void addCryptoTransaction(CryptoTransaction cryptoTransaction) {
+        URI url = UriComponentsBuilder.fromUriString("http://localhost:8080/api/v1/crypto-transactions/1")
                 .build()
                 .encode()
                 .toUri();
-        restTemplate.postForObject(url, null, CryptoTransaction.class);
+        restTemplate.postForObject(url, cryptoTransaction, CryptoTransaction.class);
     }
 
-    public void updateCryptoTransactionWithParams(CryptoTransaction cryptoTransaction) {
+    public void updateCryptoTransaction(CryptoTransaction cryptoTransaction) {
         URI url = UriComponentsBuilder.fromUriString("http://localhost:8080/api/v1/crypto-transactions")
-                .queryParam("userId", 1)
-                .queryParam("transactionId", cryptoTransaction.getTransactionId())
-                .queryParam("transactionType", cryptoTransaction.getTransactionType())
-                .queryParam("symbol", cryptoTransaction.getSymbol())
-                .queryParam("amount", cryptoTransaction.getAmount())
-                .queryParam("price", cryptoTransaction.getPrice())
-                .queryParam("transactionDate", cryptoTransaction.getTransactionDate())
                 .build()
                 .encode()
                 .toUri();
-        restTemplate.put(url, null);
+        restTemplate.put(url, cryptoTransaction);
     }
 
     public void deleteCryptoTransactionWithParams(CryptoTransaction cryptoTransaction) {

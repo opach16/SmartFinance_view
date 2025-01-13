@@ -40,15 +40,15 @@ public class CryptoTransactionService {
     }
 
     public void save(CryptoTransaction transaction) {
-        if (transaction.getTransactionId() == 0) {
-           smartFinanceClient.addCryptoTransactionWithParams(transaction);
+        if (transaction.getTransactionId() == null) {
+            smartFinanceClient.addCryptoTransaction(transaction);
         } else {
-            smartFinanceClient.updateCryptoTransactionWithParams(transaction);
+            smartFinanceClient.updateCryptoTransaction(transaction);
         }
     }
 
     public void delete(CryptoTransaction transaction) {
-        if (transaction.getTransactionId() != 0) {
+        if (transaction.getTransactionId() != null) {
             smartFinanceClient.deleteCryptoTransactionWithParams(transaction);
         }
     }
