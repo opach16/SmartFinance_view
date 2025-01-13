@@ -76,17 +76,26 @@ public class SignUpForm extends FormLayout {
 
     public void save() {
         if (email.getValue().isEmpty() || username.getValue().isEmpty() || password.getValue().isEmpty() || confirmPassword.getValue().isEmpty() || mainCurrency.getValue() == null || mainBalance.getValue() == null) {
-            Notification.show("Please fill all the fields");
+            Notification.show("Please fill all the fields")
+                    .setPosition(Notification.Position.BOTTOM_CENTER);
             return;
         }
         if (password.getValue().equals(confirmPassword.getValue())) {
             UserRegistration registration = binder.getBean();
-            userService.save(registration);
-            binder.setBean(new UserRegistration(new User()));
-            confirmPassword.clear();
-            Notification.show("User has been successfully saved");
+            try {
+                userService.save(registration);
+                binder.setBean(new UserRegistration(new User()));
+                confirmPassword.clear();
+                Notification.show("User has been successfully saved")
+                        .setPosition(Notification.Position.BOTTOM_CENTER);
+            } catch (Exception e) {
+                Notification.show(e.getMessage());
+                binder.setBean(new UserRegistration(new User()));
+                confirmPassword.clear();
+            }
         } else {
-            Notification.show("Passwords do not match");
+            Notification.show("Passwords do not match")
+                    .setPosition(Notification.Position.BOTTOM_CENTER);
             password.clear();
             confirmPassword.clear();
             password.focus();
