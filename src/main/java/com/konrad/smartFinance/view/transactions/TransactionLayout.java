@@ -43,7 +43,9 @@ public class TransactionLayout extends VerticalLayout {
         setSpacing(false);
 
         addTransactionButton.addClickListener(event -> {
-            form.setTransaction(Transaction.builder().transactionDate(LocalDate.now()).build());
+            Transaction transaction = new Transaction();
+            transaction.setTransactionDate(LocalDate.now());
+            form.setTransaction(transaction);
             form.setVisible(true);
         });
 

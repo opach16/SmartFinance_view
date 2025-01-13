@@ -150,35 +150,20 @@ public class SmartFinanceClient {
         restTemplate.delete(url);
     }
 
-    public void addTransactionWithParams(Transaction transaction) {
-        URI url = UriComponentsBuilder.fromUriString("http://localhost:8080/api/v1/accounts/transactions")
-                .queryParam("userId", 1)
-                .queryParam("transactionType", transaction.getTransactionType())
-                .queryParam("name", transaction.getName())
-                .queryParam("currency", transaction.getSymbol())
-                .queryParam("amount", transaction.getAmount())
-                .queryParam("price", transaction.getPrice())
-                .queryParam("transactionDate", transaction.getTransactionDate())
+    public void addTransaction(Transaction transaction) {
+        URI url = UriComponentsBuilder.fromUriString("http://localhost:8080/api/v1/accounts/transactions/1")
                 .build()
                 .encode()
                 .toUri();
-        restTemplate.postForObject(url, null, Transaction.class);
+        restTemplate.postForObject(url, transaction, Transaction.class);
     }
 
-    public void updateTransactionWithParams(Transaction transaction) {
+    public void updateTransaction(Transaction transaction) {
         URI url = UriComponentsBuilder.fromUriString("http://localhost:8080/api/v1/accounts/transactions")
-                .queryParam("userId", 1)
-                .queryParam("transactionId", transaction.getTransactionId())
-                .queryParam("transactionType", transaction.getTransactionType())
-                .queryParam("name", transaction.getName())
-                .queryParam("currency", transaction.getSymbol())
-                .queryParam("amount", transaction.getAmount())
-                .queryParam("price", transaction.getPrice())
-                .queryParam("transactionDate", transaction.getTransactionDate())
                 .build()
                 .encode()
                 .toUri();
-        restTemplate.put(url, null);
+        restTemplate.put(url, transaction);
     }
 
     public void deleteTransactionWithParams(Transaction transaction) {

@@ -41,15 +41,15 @@ public class TransactionService {
     }
 
     public void save(Transaction transaction) {
-        if (transaction.getTransactionId() == 0) {
-            smartFinanceClient.addTransactionWithParams(transaction);
+        if (transaction.getTransactionId() == null) {
+            smartFinanceClient.addTransaction(transaction);
         } else {
-            smartFinanceClient.updateTransactionWithParams(transaction);
+            smartFinanceClient.updateTransaction(transaction);
         }
     }
 
     public void delete(Transaction transaction) {
-        if (transaction.getTransactionId() != 0) {
+        if (transaction.getTransactionId() != null) {
             smartFinanceClient.deleteTransactionWithParams(transaction);
         }
     }
