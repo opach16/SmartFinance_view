@@ -19,7 +19,7 @@ public class Navbar extends HorizontalLayout {
         RouterLink assetsLink = new RouterLink("Assets", Assets.class);
         RouterLink transactionsLink = new RouterLink("Transactions", Transactions.class);
         RouterLink ratesLink = new RouterLink("Rates", Rates.class);
-        RouterLink userLink = new RouterLink("User", User.class);
+        RouterLink userLink = new RouterLink("Login", Login.class);
 
         Tab dashboard = new Tab(dashboardLink);
         Tab assets = new Tab(assetsLink);

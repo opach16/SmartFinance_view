@@ -20,6 +20,7 @@ public class SmartFinanceClient {
 
     public Set<CurrencyRates> fetchCurrencyRates() {
         URI url = UriComponentsBuilder.fromUriString("http://localhost:8080/api/v1/currencies")
+                .queryParam("userId", 1)
                 .build()
                 .encode()
                 .toUri();
@@ -38,6 +39,7 @@ public class SmartFinanceClient {
 
     public Set<CryptoRates> fetchCryptoRates() {
         URI url = UriComponentsBuilder.fromUriString("http://localhost:8080/api/v1/crypto")
+                .queryParam("userId", 1)
                 .build()
                 .encode()
                 .toUri();
@@ -188,4 +190,11 @@ public class SmartFinanceClient {
         restTemplate.delete(url);
     }
 
+    public void addUser(UserRegistration userRegistration) {
+        URI url = UriComponentsBuilder.fromUriString("http://localhost:8080/api/v1/users")
+                .build()
+                .encode()
+                .toUri();
+        restTemplate.postForObject(url, userRegistration, User.class);
+    }
 }
