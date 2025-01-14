@@ -74,6 +74,14 @@ public class SmartFinanceClient {
         return response != null ? new HashSet<>(Arrays.asList(response)) : Collections.emptySet();
     }
 
+    public Account fetchAccount() {
+        URI url = UriComponentsBuilder.fromUriString("http://localhost:8080/api/v1/accounts/1")
+                .build()
+                .encode()
+                .toUri();
+        return restTemplate.getForObject(url, Account.class);
+    }
+
     public void addCurrencyTransaction(CurrencyTransaction currencyTransaction) {
         URI url = UriComponentsBuilder.fromUriString("http://localhost:8080/api/v1/currency-transactions/1")
                 .build()
