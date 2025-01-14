@@ -15,10 +15,10 @@ public class CurrencyTransaction {
 
     @JsonProperty("id")
     private Long transactionId;
-    @JsonProperty("currencySymbol")
-    private CurrencySymbol symbol;
     @JsonProperty("transactionType")
     private CurrencyTransactionType transactionType;
+    @JsonProperty("currencySymbol")
+    private CurrencySymbol symbol;
     @JsonProperty("amount")
     private BigDecimal amount;
     @JsonProperty("price")

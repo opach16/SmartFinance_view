@@ -40,15 +40,15 @@ public class CurrencyTransactionService {
     }
 
     public void save(CurrencyTransaction transaction) {
-        if (transaction.getTransactionId() == 0) {
-            smartFinanceClient.addCurrencyTransactionWithParameters(transaction);
+        if (transaction.getTransactionId() == null) {
+            smartFinanceClient.addCurrencyTransaction(transaction);
         } else {
-            smartFinanceClient.updateCurrencyTransactionWithParams(transaction);
+            smartFinanceClient.updateCurrencyTransaction(transaction);
         }
     }
 
     public void delete(CurrencyTransaction transaction) {
-        if (transaction.getTransactionId() != 0) {
+        if (transaction.getTransactionId() != null) {
             smartFinanceClient.deleteCurrencyTransactionWithParams(transaction);
         }
     }

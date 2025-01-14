@@ -9,12 +9,12 @@ import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.formlayout.FormLayout;
+import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.textfield.NumberField;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.Binder;
-
-import java.math.BigDecimal;
+import com.vaadin.flow.data.converter.DoubleToBigDecimalConverter;
 
 public class CurrencyTransactionForm extends FormLayout {
 
@@ -31,37 +31,68 @@ public class CurrencyTransactionForm extends FormLayout {
     private final Binder<CurrencyTransaction> binder = new Binder<>(CurrencyTransaction.class);
 
     public CurrencyTransactionForm(CurrencyTransactionLayout currencyTransactionLayout) {
+        this.currencyTransactionLayout = currencyTransactionLayout;
         transactionId.onEnabledStateChanged(false);
+        transactionId.setVisible(false);
         transactionType.setItems(CurrencyTransactionType.values());
         symbol.setItems(CurrencySymbol.values());
-        HorizontalLayout buttons = new HorizontalLayout(saveButton, deleteButton);
         saveButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
-        add(transactionId, transactionDate, transactionType, amount, price, symbol, buttons);
-        binder.bindInstanceFields(this);
-        this.currencyTransactionLayout = currencyTransactionLayout;
+
+        HorizontalLayout buttons = new HorizontalLayout(saveButton, deleteButton);
+
         saveButton.addClickListener(e -> save());
+
         deleteButton.addClickListener(e -> delete());
+
+        binder.forField(transactionDate)
+                .asRequired("Transaction date is required")
+                .bind(CurrencyTransaction::getTransactionDate, CurrencyTransaction::setTransactionDate);
+
+        binder.forField(transactionType)
+                .asRequired("Transaction type is required")
+                .bind(CurrencyTransaction::getTransactionType, CurrencyTransaction::setTransactionType);
+
+        binder.forField(symbol)
+                .asRequired("Symbol is required")
+                .bind(CurrencyTransaction::getSymbol, CurrencyTransaction::setSymbol);
+
+        binder.forField(price)
+                .asRequired("Price/Value is required")
+                .withConverter(new DoubleToBigDecimalConverter())
+                .bind(CurrencyTransaction::getPrice, CurrencyTransaction::setPrice);
+
+        binder.forField(amount)
+                .asRequired("Amount is required")
+                .withConverter(new DoubleToBigDecimalConverter())
+                .bind(CurrencyTransaction::getAmount, CurrencyTransaction::setAmount);
+
         setWidth("50%");
+        add(transactionId, transactionDate, transactionType, amount, price, symbol, buttons);
     }
 
     public void save() {
-        CurrencyTransaction transaction = new CurrencyTransaction();
-        transaction.setTransactionDate(transactionDate.getValue());
-        transaction.setTransactionType(transactionType.getValue());
-        transaction.setSymbol(symbol.getValue());
-        transaction.setAmount(BigDecimal.valueOf(amount.getValue()));
-        transaction.setPrice(BigDecimal.valueOf(price.getValue()));
-        transaction.setTransactionId(transactionId.getValue().isBlank() ? 0L : Long.parseLong(transactionId.getValue()));
-        currencyTransactionService.save(transaction);
-        currencyTransactionLayout.refresh();
-        setTransaction(null);
+        if (binder.validate().isOk()) {
+            try {
+                currencyTransactionService.save(binder.getBean());
+                currencyTransactionLayout.refresh();
+                setTransaction(null);
+            } catch (Exception e) {
+                Notification.show(e.getMessage()).setPosition(Notification.Position.BOTTOM_CENTER);
+            }
+        } else {
+            Notification.show("Please fill all fields").setPosition(Notification.Position.BOTTOM_CENTER);
+        }
     }
 
     public void delete() {
-        CurrencyTransaction transaction = binder.getBean();
-        currencyTransactionService.delete(transaction);
-        currencyTransactionLayout.refresh();
-        setTransaction(null);
+        try {
+            CurrencyTransaction transaction = binder.getBean();
+            currencyTransactionService.delete(transaction);
+            currencyTransactionLayout.refresh();
+            setTransaction(null);
+        } catch (Exception e) {
+            Notification.show(e.getMessage()).setPosition(Notification.Position.BOTTOM_CENTER);
+        }
     }
 
     public void setTransaction(CurrencyTransaction transaction) {

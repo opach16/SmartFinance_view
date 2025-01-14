@@ -74,33 +74,20 @@ public class SmartFinanceClient {
         return response != null ? new HashSet<>(Arrays.asList(response)) : Collections.emptySet();
     }
 
-    public void addCurrencyTransactionWithParameters(CurrencyTransaction currencyTransaction) {
-        URI url = UriComponentsBuilder.fromUriString("http://localhost:8080/api/v1/currency-transactions")
-                .queryParam("userId", 1)
-                .queryParam("transactionType", currencyTransaction.getTransactionType())
-                .queryParam("currency", currencyTransaction.getSymbol())
-                .queryParam("amount", currencyTransaction.getAmount())
-                .queryParam("price", currencyTransaction.getPrice())
-                .queryParam("transactionDate", currencyTransaction.getTransactionDate())
+    public void addCurrencyTransaction(CurrencyTransaction currencyTransaction) {
+        URI url = UriComponentsBuilder.fromUriString("http://localhost:8080/api/v1/currency-transactions/1")
                 .build()
                 .encode()
                 .toUri();
-        restTemplate.postForObject(url, null, CurrencyTransaction.class);
+        restTemplate.postForObject(url, currencyTransaction, CurrencyTransaction.class);
     }
 
-    public void updateCurrencyTransactionWithParams(CurrencyTransaction currencyTransaction) {
+    public void updateCurrencyTransaction(CurrencyTransaction currencyTransaction) {
         URI url = UriComponentsBuilder.fromUriString("http://localhost:8080/api/v1/currency-transactions")
-                .queryParam("userId", 1)
-                .queryParam("transactionId", currencyTransaction.getTransactionId())
-                .queryParam("transactionType", currencyTransaction.getTransactionType())
-                .queryParam("currency", currencyTransaction.getSymbol())
-                .queryParam("amount", currencyTransaction.getAmount())
-                .queryParam("price", currencyTransaction.getPrice())
-                .queryParam("transactionDate", currencyTransaction.getTransactionDate())
                 .build()
                 .encode()
                 .toUri();
-        restTemplate.put(url, null);
+        restTemplate.put(url, currencyTransaction);
     }
 
     public void deleteCurrencyTransactionWithParams(CurrencyTransaction currencyTransaction) {

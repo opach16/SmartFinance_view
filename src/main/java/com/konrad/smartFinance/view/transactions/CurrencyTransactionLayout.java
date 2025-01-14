@@ -9,6 +9,8 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.value.ValueChangeMode;
 
+import java.time.LocalDate;
+
 public class CurrencyTransactionLayout extends VerticalLayout {
 
     private final CurrencyTransactionService currencyTransactionService = CurrencyTransactionService.getInstance();
@@ -41,7 +43,9 @@ public class CurrencyTransactionLayout extends VerticalLayout {
         setSpacing(false);
 
         addTransactionButton.addClickListener(event -> {
-            form.setTransaction(new CurrencyTransaction());
+            CurrencyTransaction transaction = new CurrencyTransaction();
+            transaction.setTransactionDate(LocalDate.now());
+            form.setTransaction(transaction);
             form.setVisible(true);
         });
 
