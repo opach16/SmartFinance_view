@@ -67,7 +67,7 @@ public class CurrencyTransactionForm extends FormLayout {
                 .bind(CurrencyTransaction::getAmount, CurrencyTransaction::setAmount);
 
         setWidth("50%");
-        add(transactionId, transactionDate, transactionType, amount, price, symbol, buttons);
+        add(transactionId, transactionDate, transactionType, symbol, amount, price, buttons);
     }
 
     public void save() {

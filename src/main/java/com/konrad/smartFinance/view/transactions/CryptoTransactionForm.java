@@ -66,7 +66,7 @@ public class CryptoTransactionForm extends FormLayout {
                 .bind(CryptoTransaction::getAmount, CryptoTransaction::setAmount);
 
         setWidth("50%");
-        add(transactionId, transactionDate, transactionType, amount, price, symbol, buttons);
+        add(transactionId, transactionDate, transactionType, symbol, amount, price, buttons);
     }
 
     public void save() {
