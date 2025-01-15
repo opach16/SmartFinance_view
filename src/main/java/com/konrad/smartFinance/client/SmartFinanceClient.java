@@ -56,8 +56,8 @@ public class SmartFinanceClient {
         return response != null ? new HashSet<CryptoTransaction>(Arrays.asList(response)) : Collections.emptySet();
     }
 
-    public Set<DebitTransaction> fetchTransactions() {
-        URI url = UriComponentsBuilder.fromUriString("http://localhost:8080/api/v1/accounts/1/transactions")
+    public Set<DebitTransaction> fetchDebitTransactions() {
+        URI url = UriComponentsBuilder.fromUriString("http://localhost:8080/api/v1/debit-transactions/1/all")
                 .build()
                 .encode()
                 .toUri();
