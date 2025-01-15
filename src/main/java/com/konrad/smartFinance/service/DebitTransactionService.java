@@ -30,7 +30,7 @@ public class DebitTransactionService {
     }
 
     public void updateTransactions() {
-        transactions = smartFinanceClient.fetchTransactions();
+        transactions = smartFinanceClient.fetchDebitTransactions();
     }
 
     public Set<DebitTransaction> findByName(String name) {
