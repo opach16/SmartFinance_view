@@ -1,6 +1,6 @@
 package com.konrad.smartFinance;
 
-public enum AccountTransactionType {
+public enum DebitTransactionType {
 
     EXPENSE, INCOME
 }

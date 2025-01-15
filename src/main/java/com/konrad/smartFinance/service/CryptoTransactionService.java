@@ -49,7 +49,7 @@ public class CryptoTransactionService {
 
     public void delete(CryptoTransaction transaction) {
         if (transaction.getTransactionId() != null) {
-            smartFinanceClient.deleteCryptoTransactionWithParams(transaction);
+            smartFinanceClient.deleteCryptoTransaction(transaction);
         }
     }
 }

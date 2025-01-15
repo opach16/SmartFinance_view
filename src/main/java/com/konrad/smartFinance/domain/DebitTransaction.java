@@ -2,8 +2,8 @@ package com.konrad.smartFinance.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.konrad.smartFinance.AccountTransactionType;
 import com.konrad.smartFinance.CurrencySymbol;
+import com.konrad.smartFinance.DebitTransactionType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -17,14 +17,14 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @Data
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Transaction {
+public class DebitTransaction {
 
     @JsonProperty("id")
     private Long transactionId;
     @JsonProperty("transactionDate")
     private LocalDate transactionDate;
     @JsonProperty("transactionType")
-    private AccountTransactionType transactionType;
+    private DebitTransactionType transactionType;
     @JsonProperty("name")
     private String name;
     @JsonProperty("currencySymbol")

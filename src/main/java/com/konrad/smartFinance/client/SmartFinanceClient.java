@@ -56,13 +56,13 @@ public class SmartFinanceClient {
         return response != null ? new HashSet<CryptoTransaction>(Arrays.asList(response)) : Collections.emptySet();
     }
 
-    public Set<Transaction> fetchTransactions() {
+    public Set<DebitTransaction> fetchTransactions() {
         URI url = UriComponentsBuilder.fromUriString("http://localhost:8080/api/v1/accounts/1/transactions")
                 .build()
                 .encode()
                 .toUri();
-        Transaction[] response = restTemplate.getForObject(url, Transaction[].class);
-        return response != null ? new HashSet<Transaction>(Arrays.asList(response)) : Collections.emptySet();
+        DebitTransaction[] response = restTemplate.getForObject(url, DebitTransaction[].class);
+        return response != null ? new HashSet<DebitTransaction>(Arrays.asList(response)) : Collections.emptySet();
     }
 
     public Set<Asset> fetchAssets() {
@@ -98,7 +98,7 @@ public class SmartFinanceClient {
         restTemplate.put(url, currencyTransaction);
     }
 
-    public void deleteCurrencyTransactionWithParams(CurrencyTransaction currencyTransaction) {
+    public void deleteCurrencyTransaction(CurrencyTransaction currencyTransaction) {
         URI url = UriComponentsBuilder.fromUriString("http://localhost:8080/api/v1/currency-transactions")
                 .queryParam("transactionId", currencyTransaction.getTransactionId())
                 .build()
@@ -123,7 +123,7 @@ public class SmartFinanceClient {
         restTemplate.put(url, cryptoTransaction);
     }
 
-    public void deleteCryptoTransactionWithParams(CryptoTransaction cryptoTransaction) {
+    public void deleteCryptoTransaction(CryptoTransaction cryptoTransaction) {
         URI url = UriComponentsBuilder.fromUriString("http://localhost:8080/api/v1/crypto-transactions")
                 .queryParam("transactionId", cryptoTransaction.getTransactionId())
                 .build()
@@ -132,24 +132,24 @@ public class SmartFinanceClient {
         restTemplate.delete(url);
     }
 
-    public void addTransaction(Transaction transaction) {
-        URI url = UriComponentsBuilder.fromUriString("http://localhost:8080/api/v1/accounts/transactions/1")
+    public void addDebitTransaction(DebitTransaction transaction) {
+        URI url = UriComponentsBuilder.fromUriString("http://localhost:8080/api/v1/debit-transactions/1")
                 .build()
                 .encode()
                 .toUri();
-        restTemplate.postForObject(url, transaction, Transaction.class);
+        restTemplate.postForObject(url, transaction, DebitTransaction.class);
     }
 
-    public void updateTransaction(Transaction transaction) {
-        URI url = UriComponentsBuilder.fromUriString("http://localhost:8080/api/v1/accounts/transactions")
+    public void updateDebitTransaction(DebitTransaction transaction) {
+        URI url = UriComponentsBuilder.fromUriString("http://localhost:8080/api/v1/debit-transactions")
                 .build()
                 .encode()
                 .toUri();
         restTemplate.put(url, transaction);
     }
 
-    public void deleteTransactionWithParams(Transaction transaction) {
-        URI url = UriComponentsBuilder.fromUriString("http://localhost:8080/api/v1/accounts/transactions")
+    public void deleteDebitTransaction(DebitTransaction transaction) {
+        URI url = UriComponentsBuilder.fromUriString("http://localhost:8080/api/v1/debit-transactions")
                 .queryParam("transactionId", transaction.getTransactionId())
                 .build()
                 .encode()

@@ -14,7 +14,7 @@ public class Dashboard extends VerticalLayout {
 
     private final AccountService accountService;
 
-    private final H1 balance = new H1("Balance");
+    private final H1 balance = new H1("Debit Balance");
     private final H1 assetsBalance = new H1("Assets Balance");
     private final H1 totalBalance = new H1("Total Balance");
     private H1 balanceValue = new H1();
@@ -44,7 +44,9 @@ public class Dashboard extends VerticalLayout {
 
         HorizontalLayout horizontalLayout = new HorizontalLayout(balanceDiv, assetsBalanceDiv, totalBalanceDiv);
         horizontalLayout.setAlignItems(Alignment.CENTER);
+        horizontalLayout.setDefaultVerticalComponentAlignment(Alignment.CENTER);
         add(horizontalLayout);
+        setSizeFull();
         setAlignItems(Alignment.CENTER);
         setJustifyContentMode(JustifyContentMode.CENTER);
     }

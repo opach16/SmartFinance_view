@@ -1,9 +1,9 @@
 package com.konrad.smartFinance.view.transactions;
 
-import com.konrad.smartFinance.AccountTransactionType;
 import com.konrad.smartFinance.CurrencySymbol;
-import com.konrad.smartFinance.domain.Transaction;
-import com.konrad.smartFinance.service.TransactionService;
+import com.konrad.smartFinance.DebitTransactionType;
+import com.konrad.smartFinance.domain.DebitTransaction;
+import com.konrad.smartFinance.service.DebitTransactionService;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.combobox.ComboBox;
@@ -16,46 +16,41 @@ import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.data.converter.DoubleToBigDecimalConverter;
 
-import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.util.Objects;
-import java.util.stream.Stream;
+public class DebitTransactionForm extends FormLayout {
 
-public class TransactionForm extends FormLayout {
-
-    private final TransactionService transactionService = TransactionService.getInstance();
-    private final TransactionLayout transactionLayout;
+    private final DebitTransactionService debitTransactionService = DebitTransactionService.getInstance();
+    private final DebitTransactionLayout debitTransactionLayout;
     private final TextField transactionId = new TextField("Transaction ID");
     private final DatePicker transactionDate = new DatePicker("Transaction Date");
-    private final ComboBox<AccountTransactionType> transactionType = new ComboBox<>("Transaction Type");
+    private final ComboBox<DebitTransactionType> transactionType = new ComboBox<>("Transaction Type");
     private final TextField name = new TextField("Name");
     private final NumberField amount = new NumberField("Amount");
     private final NumberField price = new NumberField("Price");
     private final ComboBox<CurrencySymbol> symbol = new ComboBox<>("Symbol");
     private final Button saveButton = new Button("Save");
     private final Button deleteButton = new Button("Delete");
-    private final Binder<Transaction> binder = new Binder<>(Transaction.class);
+    private final Binder<DebitTransaction> binder = new Binder<>(DebitTransaction.class);
 
-    public TransactionForm(TransactionLayout transactionLayout) {
-        this.transactionLayout = transactionLayout;
+    public DebitTransactionForm(DebitTransactionLayout debitTransactionLayout) {
+        this.debitTransactionLayout = debitTransactionLayout;
         transactionId.onEnabledStateChanged(false);
         transactionId.setVisible(false);
         amount.setVisible(false);
         price.setVisible(false);
-        transactionType.setItems(AccountTransactionType.values());
+        transactionType.setItems(DebitTransactionType.values());
         symbol.setItems(CurrencySymbol.values());
         saveButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
 
         HorizontalLayout buttons = new HorizontalLayout(saveButton, deleteButton);
 
         transactionType.addValueChangeListener(event -> {
-            AccountTransactionType type = event.getValue();
-            if (type == AccountTransactionType.INCOME) {
+            DebitTransactionType type = event.getValue();
+            if (type == DebitTransactionType.INCOME) {
                 amount.setValue(1.0);
                 amount.setVisible(false);
                 price.setLabel("Value");
                 price.setVisible(true);
-            } else if (type == AccountTransactionType.EXPENSE) {
+            } else if (type == DebitTransactionType.EXPENSE) {
                 amount.clear();
                 amount.setVisible(true);
                 price.setLabel("Price");
@@ -69,25 +64,25 @@ public class TransactionForm extends FormLayout {
 
         binder.forField(transactionDate)
                 .asRequired("Transaction date is required")
-                .bind(Transaction::getTransactionDate, Transaction::setTransactionDate);
+                .bind(DebitTransaction::getTransactionDate, DebitTransaction::setTransactionDate);
 
         binder.forField(transactionType)
                 .asRequired("Transaction type is required")
-                .bind(Transaction::getTransactionType, Transaction::setTransactionType);
+                .bind(DebitTransaction::getTransactionType, DebitTransaction::setTransactionType);
 
         binder.forField(name)
                 .asRequired("Name is required")
-                .bind(Transaction::getName, Transaction::setName);
+                .bind(DebitTransaction::getName, DebitTransaction::setName);
 
         binder.forField(price)
                 .asRequired("Price/Value is required")
                 .withConverter(new DoubleToBigDecimalConverter())
-                .bind(Transaction::getPrice, Transaction::setPrice);
+                .bind(DebitTransaction::getPrice, DebitTransaction::setPrice);
 
         binder.forField(amount)
                 .asRequired("Amount is required")
                 .withConverter(new DoubleToBigDecimalConverter())
-                .bind(Transaction::getAmount, Transaction::setAmount);
+                .bind(DebitTransaction::getAmount, DebitTransaction::setAmount);
 
         setWidth("50%");
         add(transactionId, transactionDate, transactionType, name, amount, price, buttons);
@@ -96,8 +91,8 @@ public class TransactionForm extends FormLayout {
     public void save() {
         if (binder.validate().isOk()) {
             try {
-                transactionService.save(binder.getBean());
-                transactionLayout.refresh();
+                debitTransactionService.save(binder.getBean());
+                debitTransactionLayout.refresh();
                 setTransaction(null);
             } catch (Exception e) {
                 Notification.show(e.getMessage()).setPosition(Notification.Position.BOTTOM_CENTER);
@@ -108,17 +103,17 @@ public class TransactionForm extends FormLayout {
     }
 
     public void delete() {
-        Transaction transaction = binder.getBean();
+        DebitTransaction transaction = binder.getBean();
         try {
-            transactionService.delete(transaction);
-            transactionLayout.refresh();
+            debitTransactionService.delete(transaction);
+            debitTransactionLayout.refresh();
             setTransaction(null);
         } catch (Exception e) {
             Notification.show(e.getMessage()).setPosition(Notification.Position.BOTTOM_CENTER);
         }
     }
 
-    public void setTransaction(Transaction transaction) {
+    public void setTransaction(DebitTransaction transaction) {
         binder.setBean(transaction);
 
         if (transaction == null) {

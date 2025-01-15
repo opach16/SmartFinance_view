@@ -49,7 +49,7 @@ public class CurrencyTransactionService {
 
     public void delete(CurrencyTransaction transaction) {
         if (transaction.getTransactionId() != null) {
-            smartFinanceClient.deleteCurrencyTransactionWithParams(transaction);
+            smartFinanceClient.deleteCurrencyTransaction(transaction);
         }
     }
 }

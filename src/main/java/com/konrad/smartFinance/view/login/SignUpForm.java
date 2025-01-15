@@ -90,7 +90,7 @@ public class SignUpForm extends FormLayout {
                     Notification.show("User has been successfully saved")
                             .setPosition(Notification.Position.BOTTOM_CENTER);
                 } catch (Exception e) {
-                    Notification.show(e.getMessage());
+                    Notification.show(e.getMessage()).setPosition(Notification.Position.BOTTOM_CENTER);
                     binder.setBean(new UserRegistration(new User()));
                     confirmPassword.clear();
                 }

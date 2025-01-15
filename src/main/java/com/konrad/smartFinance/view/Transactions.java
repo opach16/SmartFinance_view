@@ -2,7 +2,7 @@ package com.konrad.smartFinance.view;
 
 import com.konrad.smartFinance.view.transactions.CryptoTransactionLayout;
 import com.konrad.smartFinance.view.transactions.CurrencyTransactionLayout;
-import com.konrad.smartFinance.view.transactions.TransactionLayout;
+import com.konrad.smartFinance.view.transactions.DebitTransactionLayout;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -14,33 +14,33 @@ public class Transactions extends VerticalLayout {
     private final Button debitButton = new Button("Debit");
     private final Button currencyButton = new Button("Currencies");
     private final Button cryptoButton = new Button("Crypto");
-    private final TransactionLayout transactionLayout = new TransactionLayout();
+    private final DebitTransactionLayout debitTransactionLayout = new DebitTransactionLayout();
     private final CurrencyTransactionLayout currencyTransactionLayout = new CurrencyTransactionLayout();
     private final CryptoTransactionLayout cryptoTransactionLayout = new CryptoTransactionLayout();
 
     public Transactions() {
 
-        transactionLayout.setVisible(true);
+        debitTransactionLayout.setVisible(true);
         currencyTransactionLayout.setVisible(false);
         cryptoTransactionLayout.setVisible(false);
 
         HorizontalLayout toolbar = new HorizontalLayout(debitButton, currencyButton, cryptoButton);
         toolbar.setAlignItems(Alignment.END);
 
-        VerticalLayout mainContent = new VerticalLayout(toolbar, transactionLayout, currencyTransactionLayout, cryptoTransactionLayout);
+        VerticalLayout mainContent = new VerticalLayout(toolbar, debitTransactionLayout, currencyTransactionLayout, cryptoTransactionLayout);
         mainContent.setSizeFull();
 
         debitButton.addClickListener(event -> {
-            transactionLayout.refresh();
-            transactionLayout.setVisible(true);
+            debitTransactionLayout.refresh();
+            debitTransactionLayout.setVisible(true);
             currencyTransactionLayout.setVisible(false);
             cryptoTransactionLayout.setVisible(false);
-            transactionLayout.refresh();
+            debitTransactionLayout.refresh();
         });
 
         currencyButton.addClickListener(event -> {
             currencyTransactionLayout.refresh();
-            transactionLayout.setVisible(false);
+            debitTransactionLayout.setVisible(false);
             currencyTransactionLayout.setVisible(true);
             cryptoTransactionLayout.setVisible(false);
             currencyTransactionLayout.refresh();
@@ -48,7 +48,7 @@ public class Transactions extends VerticalLayout {
 
         cryptoButton.addClickListener(event -> {
             cryptoTransactionLayout.refresh();
-            transactionLayout.setVisible(false);
+            debitTransactionLayout.setVisible(false);
             currencyTransactionLayout.setVisible(false);
             cryptoTransactionLayout.setVisible(true);
             currencyTransactionLayout.refresh();

@@ -1,7 +1,7 @@
 package com.konrad.smartFinance.view.transactions;
 
-import com.konrad.smartFinance.domain.Transaction;
-import com.konrad.smartFinance.service.TransactionService;
+import com.konrad.smartFinance.domain.DebitTransaction;
+import com.konrad.smartFinance.service.DebitTransactionService;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
@@ -11,15 +11,15 @@ import com.vaadin.flow.data.value.ValueChangeMode;
 
 import java.time.LocalDate;
 
-public class TransactionLayout extends VerticalLayout {
+public class DebitTransactionLayout extends VerticalLayout {
 
-    private final TransactionService transactionService = TransactionService.getInstance();
-    private final Grid<Transaction> grid = new Grid<>(Transaction.class);
+    private final DebitTransactionService debitTransactionService = DebitTransactionService.getInstance();
+    private final Grid<DebitTransaction> grid = new Grid<>(DebitTransaction.class);
     private final TextField filter = new TextField();
     private final Button addTransactionButton = new Button("Add transaction");
-    private final TransactionForm form = new TransactionForm(this);
+    private final DebitTransactionForm form = new DebitTransactionForm(this);
 
-    public TransactionLayout() {
+    public DebitTransactionLayout() {
         filter.setPlaceholder("Filter by name..");
         filter.setClearButtonVisible(true);
         filter.setValueChangeMode(ValueChangeMode.EAGER);
@@ -43,7 +43,7 @@ public class TransactionLayout extends VerticalLayout {
         setSpacing(false);
 
         addTransactionButton.addClickListener(event -> {
-            Transaction transaction = new Transaction();
+            DebitTransaction transaction = new DebitTransaction();
             transaction.setTransactionDate(LocalDate.now());
             form.setTransaction(transaction);
             form.setVisible(true);
@@ -53,11 +53,11 @@ public class TransactionLayout extends VerticalLayout {
     }
 
     public void refresh() {
-        transactionService.updateTransactions();
-        grid.setItems(transactionService.getTransactions());
+        debitTransactionService.updateTransactions();
+        grid.setItems(debitTransactionService.getTransactions());
     }
 
     public void update() {
-        grid.setItems(transactionService.findByName(filter.getValue()));
+        grid.setItems(debitTransactionService.findByName(filter.getValue()));
     }
 }
