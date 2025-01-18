@@ -7,7 +7,7 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.Route;
 
-@Route("user")
+@Route("login")
 public class Login extends VerticalLayout {
 
     private final Button signUpButton = new Button("Sign Up");
