@@ -21,6 +21,8 @@ public class CryptoTransaction {
 
     @JsonProperty("id")
     private Long transactionId;
+    @JsonProperty("userId")
+    private Long userId;
     @JsonProperty("transactionType")
     private CryptoTransactionType transactionType;
     @JsonProperty("cryptocurrencySymbol")

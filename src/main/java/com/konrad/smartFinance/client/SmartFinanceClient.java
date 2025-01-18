@@ -1,6 +1,9 @@
 package com.konrad.smartFinance.client;
 
 import com.konrad.smartFinance.domain.*;
+import com.vaadin.flow.component.UI;
+import com.vaadin.flow.component.notification.Notification;
+import com.vaadin.flow.server.VaadinSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
@@ -19,54 +22,52 @@ public class SmartFinanceClient {
     private final RestTemplate restTemplate;
 
     public Set<CurrencyRates> fetchCurrencyRates() {
-        URI url = UriComponentsBuilder.fromUriString("http://localhost:8080/api/v1/currencies")
-                .queryParam("userId", 1)
+        URI url = UriComponentsBuilder.fromUriString("http://localhost:8080/api/v1/currencies/user/" + getUserDetails().getUserId())
                 .build()
                 .encode()
                 .toUri();
-        CurrencyRates[] response = restTemplate.getForObject(url, CurrencyRates[].class);
-        return response != null ? new HashSet<CurrencyRates>(Arrays.asList(response)) : Collections.emptySet();
+            CurrencyRates[] response = restTemplate.getForObject(url, CurrencyRates[].class);
+            return response != null ? new HashSet<>(Arrays.asList(response)) : Collections.emptySet();
     }
 
     public Set<CurrencyTransaction> fetchCurrencyTransactions() {
-        URI url = UriComponentsBuilder.fromUriString("http://localhost:8080/api/v1/currency-transactions")
+        URI url = UriComponentsBuilder.fromUriString("http://localhost:8080/api/v1/currency-transactions/user/" + getUserDetails().getUserId())
                 .build()
                 .encode()
                 .toUri();
         CurrencyTransaction[] response = restTemplate.getForObject(url, CurrencyTransaction[].class);
-        return response != null ? new HashSet<CurrencyTransaction>(Arrays.asList(response)) : Collections.emptySet();
+        return response != null ? new HashSet<>(Arrays.asList(response)) : Collections.emptySet();
     }
 
     public Set<CryptoRates> fetchCryptoRates() {
-        URI url = UriComponentsBuilder.fromUriString("http://localhost:8080/api/v1/crypto")
-                .queryParam("userId", 1)
+        URI url = UriComponentsBuilder.fromUriString("http://localhost:8080/api/v1/crypto/user/" + getUserDetails().getUserId())
                 .build()
                 .encode()
                 .toUri();
         CryptoRates[] response = restTemplate.getForObject(url, CryptoRates[].class);
-        return response != null ? new HashSet<CryptoRates>(Arrays.asList(response)) : Collections.emptySet();
+        return response != null ? new HashSet<>(Arrays.asList(response)) : Collections.emptySet();
     }
 
     public Set<CryptoTransaction> fetchCryptoTransactions() {
-        URI url = UriComponentsBuilder.fromUriString("http://localhost:8080/api/v1/crypto-transactions")
+        URI url = UriComponentsBuilder.fromUriString("http://localhost:8080/api/v1/crypto-transactions/user/" + getUserDetails().getUserId())
                 .build()
                 .encode()
                 .toUri();
-        CryptoTransaction[] response = restTemplate.getForObject(url, CryptoTransaction[].class);
-        return response != null ? new HashSet<CryptoTransaction>(Arrays.asList(response)) : Collections.emptySet();
+            CryptoTransaction[] response = restTemplate.getForObject(url, CryptoTransaction[].class);
+            return response != null ? new HashSet<>(Arrays.asList(response)) : Collections.emptySet();
     }
 
     public Set<DebitTransaction> fetchDebitTransactions() {
-        URI url = UriComponentsBuilder.fromUriString("http://localhost:8080/api/v1/debit-transactions/1/all")
+        URI url = UriComponentsBuilder.fromUriString("http://localhost:8080/api/v1/debit-transactions/" + getUserDetails().getUserId() + "/all")
                 .build()
                 .encode()
                 .toUri();
         DebitTransaction[] response = restTemplate.getForObject(url, DebitTransaction[].class);
-        return response != null ? new HashSet<DebitTransaction>(Arrays.asList(response)) : Collections.emptySet();
+        return response != null ? new HashSet<>(Arrays.asList(response)) : Collections.emptySet();
     }
 
     public Set<Asset> fetchAssets() {
-        URI url = UriComponentsBuilder.fromUriString("http://localhost:8080/api/v1/assets")
+        URI url = UriComponentsBuilder.fromUriString("http://localhost:8080/api/v1/assets/" + getUserDetails().getUserId())
                 .build()
                 .encode()
                 .toUri();
@@ -75,7 +76,7 @@ public class SmartFinanceClient {
     }
 
     public Account fetchAccount() {
-        URI url = UriComponentsBuilder.fromUriString("http://localhost:8080/api/v1/accounts/1")
+        URI url = UriComponentsBuilder.fromUriString("http://localhost:8080/api/v1/accounts/" + getUserDetails().getUserId())
                 .build()
                 .encode()
                 .toUri();
@@ -83,10 +84,11 @@ public class SmartFinanceClient {
     }
 
     public void addCurrencyTransaction(CurrencyTransaction currencyTransaction) {
-        URI url = UriComponentsBuilder.fromUriString("http://localhost:8080/api/v1/currency-transactions/1")
+        URI url = UriComponentsBuilder.fromUriString("http://localhost:8080/api/v1/currency-transactions")
                 .build()
                 .encode()
                 .toUri();
+        currencyTransaction.setUserId(getUserDetails().getUserId());
         restTemplate.postForObject(url, currencyTransaction, CurrencyTransaction.class);
     }
 
@@ -95,6 +97,7 @@ public class SmartFinanceClient {
                 .build()
                 .encode()
                 .toUri();
+        currencyTransaction.setUserId(getUserDetails().getUserId());
         restTemplate.put(url, currencyTransaction);
     }
 
@@ -104,14 +107,16 @@ public class SmartFinanceClient {
                 .build()
                 .encode()
                 .toUri();
+        currencyTransaction.setUserId(getUserDetails().getUserId());
         restTemplate.delete(url);
     }
 
     public void addCryptoTransaction(CryptoTransaction cryptoTransaction) {
-        URI url = UriComponentsBuilder.fromUriString("http://localhost:8080/api/v1/crypto-transactions/1")
+        URI url = UriComponentsBuilder.fromUriString("http://localhost:8080/api/v1/crypto-transactions")
                 .build()
                 .encode()
                 .toUri();
+        cryptoTransaction.setUserId(getUserDetails().getUserId());
         restTemplate.postForObject(url, cryptoTransaction, CryptoTransaction.class);
     }
 
@@ -120,6 +125,7 @@ public class SmartFinanceClient {
                 .build()
                 .encode()
                 .toUri();
+        cryptoTransaction.setUserId(getUserDetails().getUserId());
         restTemplate.put(url, cryptoTransaction);
     }
 
@@ -129,14 +135,16 @@ public class SmartFinanceClient {
                 .build()
                 .encode()
                 .toUri();
+        cryptoTransaction.setUserId(getUserDetails().getUserId());
         restTemplate.delete(url);
     }
 
     public void addDebitTransaction(DebitTransaction transaction) {
-        URI url = UriComponentsBuilder.fromUriString("http://localhost:8080/api/v1/debit-transactions/1")
+        URI url = UriComponentsBuilder.fromUriString("http://localhost:8080/api/v1/debit-transactions")
                 .build()
                 .encode()
                 .toUri();
+        transaction.setUserId(getUserDetails().getUserId());
         restTemplate.postForObject(url, transaction, DebitTransaction.class);
     }
 
@@ -145,6 +153,7 @@ public class SmartFinanceClient {
                 .build()
                 .encode()
                 .toUri();
+        transaction.setUserId(getUserDetails().getUserId());
         restTemplate.put(url, transaction);
     }
 
@@ -154,6 +163,7 @@ public class SmartFinanceClient {
                 .build()
                 .encode()
                 .toUri();
+        transaction.setUserId(getUserDetails().getUserId());
         restTemplate.delete(url);
     }
 
@@ -163,5 +173,30 @@ public class SmartFinanceClient {
                 .encode()
                 .toUri();
         restTemplate.postForObject(url, userRegistration, User.class);
+    }
+
+    public void login(LoginData loginData) {
+        URI url = UriComponentsBuilder.fromUriString("http://localhost:8080/auth/login")
+                .build()
+                .encode()
+                .toUri();
+        UserDetails userDetails = restTemplate.postForObject(url, loginData, UserDetails.class);
+        if (userDetails != null && !userDetails.getUsername().isEmpty()) {
+            VaadinSession.getCurrent().setAttribute("username", userDetails.getUsername());
+            VaadinSession.getCurrent().setAttribute("userId", userDetails.getUserId());
+            Notification.show("Logged in successfully as " + userDetails.getUsername() + " ID: " + userDetails.getUserId());
+        } else {
+            throw new RuntimeException("Login failed: invalid username or password.");
+        }
+    }
+
+    private UserDetails getUserDetails() {
+        String username = (String) VaadinSession.getCurrent().getAttribute("username");
+        Long userId = (Long) VaadinSession.getCurrent().getAttribute("userId");
+
+        if (username == null || userId == null) {
+            UI.getCurrent().navigate("login");
+        }
+        return new UserDetails(username, userId);
     }
 }

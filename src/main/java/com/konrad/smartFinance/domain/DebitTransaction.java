@@ -21,6 +21,8 @@ public class DebitTransaction {
 
     @JsonProperty("id")
     private Long transactionId;
+    @JsonProperty("userId")
+    private Long userId;
     @JsonProperty("transactionDate")
     private LocalDate transactionDate;
     @JsonProperty("transactionType")

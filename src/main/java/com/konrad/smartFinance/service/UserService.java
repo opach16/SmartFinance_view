@@ -1,6 +1,7 @@
 package com.konrad.smartFinance.service;
 
 import com.konrad.smartFinance.client.SmartFinanceClient;
+import com.konrad.smartFinance.domain.LoginData;
 import com.konrad.smartFinance.domain.UserRegistration;
 import lombok.Getter;
 import org.springframework.stereotype.Service;
@@ -22,6 +23,10 @@ public class UserService {
             userService = new UserService();
         }
         return userService;
+    }
+
+    public void login(LoginData loginData) {
+        smartFinanceClient.login(loginData);
     }
 
     public void save(UserRegistration userRegistration) {

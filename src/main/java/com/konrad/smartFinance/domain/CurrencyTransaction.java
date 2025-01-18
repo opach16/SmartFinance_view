@@ -15,6 +15,8 @@ public class CurrencyTransaction {
 
     @JsonProperty("id")
     private Long transactionId;
+    @JsonProperty("userId")
+    private Long userId;
     @JsonProperty("transactionType")
     private CurrencyTransactionType transactionType;
     @JsonProperty("currencySymbol")
