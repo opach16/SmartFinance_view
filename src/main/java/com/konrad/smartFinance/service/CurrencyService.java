@@ -6,6 +6,7 @@ import lombok.Getter;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.HashSet;
 import java.util.Set;
 
 @Getter
@@ -18,7 +19,7 @@ public class CurrencyService {
 
     private CurrencyService() {
         smartFinanceClient = new SmartFinanceClient(new RestTemplate());
-        updateCurrencyRates();
+        currencyRates = new HashSet<>();
     }
 
     public static CurrencyService getInstance() {
@@ -28,7 +29,7 @@ public class CurrencyService {
         return currencyService;
     }
 
-    private void updateCurrencyRates() {
+    public void updateCurrencyRates() {
         currencyRates = smartFinanceClient.fetchCurrencyRates();
     }
 }

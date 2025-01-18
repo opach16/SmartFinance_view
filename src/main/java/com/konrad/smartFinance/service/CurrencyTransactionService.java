@@ -6,6 +6,7 @@ import lombok.Getter;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -19,7 +20,7 @@ public class CurrencyTransactionService {
 
     private CurrencyTransactionService() {
         smartFinanceClient = new SmartFinanceClient(new RestTemplate());
-        updateCurrencyTransactions();
+        currencyTransactions = new HashSet<>();
     }
 
     public static CurrencyTransactionService getInstance() {

@@ -6,6 +6,7 @@ import lombok.Getter;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -19,7 +20,7 @@ public class DebitTransactionService {
 
     private DebitTransactionService() {
         smartFinanceClient = new SmartFinanceClient(new RestTemplate());
-        updateTransactions();
+        transactions = new HashSet<>();
     }
 
     public static DebitTransactionService getInstance() {
