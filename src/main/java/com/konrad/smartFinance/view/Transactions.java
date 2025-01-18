@@ -3,10 +3,13 @@ package com.konrad.smartFinance.view;
 import com.konrad.smartFinance.view.transactions.CryptoTransactionLayout;
 import com.konrad.smartFinance.view.transactions.CurrencyTransactionLayout;
 import com.konrad.smartFinance.view.transactions.DebitTransactionLayout;
+import com.vaadin.flow.component.AttachEvent;
+import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.Route;
+import com.vaadin.flow.server.VaadinSession;
 
 @Route("transactions")
 public class Transactions extends VerticalLayout {
@@ -59,5 +62,13 @@ public class Transactions extends VerticalLayout {
         setSpacing(false);
 
         add(mainContent);
+    }
+
+    @Override
+    protected void onAttach(AttachEvent attachEvent) {
+        super.onAttach(attachEvent);
+        if (VaadinSession.getCurrent().getAttribute("username") == null) {
+            UI.getCurrent().navigate("login");
+        }
     }
 }

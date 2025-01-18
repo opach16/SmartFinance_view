@@ -5,11 +5,13 @@ import com.konrad.smartFinance.domain.CurrencyRates;
 import com.konrad.smartFinance.service.CryptoService;
 import com.konrad.smartFinance.service.CurrencyService;
 import com.vaadin.flow.component.AttachEvent;
+import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.Route;
+import com.vaadin.flow.server.VaadinSession;
 
 @Route("rates")
 public class Rates extends VerticalLayout {
@@ -61,10 +63,16 @@ public class Rates extends VerticalLayout {
     @Override
     protected void onAttach(AttachEvent attachEvent) {
         super.onAttach(attachEvent);
-        refresh();
+        if (VaadinSession.getCurrent().getAttribute("username") == null) {
+            UI.getCurrent().navigate("login");
+        } else {
+            refresh();
+        }
     }
 
     public void refresh() {
+        cryptoService.updateRates();
+        currencyService.updateCurrencyRates();
         fiatRatesGrid.setItems(currencyService.getCurrencyRates());
         cryptoRatesGrid.setItems(cryptoService.getCryptoRates());
     }

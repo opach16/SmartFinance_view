@@ -3,11 +3,13 @@ package com.konrad.smartFinance.view;
 import com.konrad.smartFinance.domain.Account;
 import com.konrad.smartFinance.service.AccountService;
 import com.vaadin.flow.component.AttachEvent;
+import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.Route;
+import com.vaadin.flow.server.VaadinSession;
 
 @Route("/")
 public class Dashboard extends VerticalLayout {
@@ -54,7 +56,11 @@ public class Dashboard extends VerticalLayout {
     @Override
     protected void onAttach(AttachEvent attachEvent) {
         super.onAttach(attachEvent);
-        refresh();
+        if (VaadinSession.getCurrent().getAttribute("username") == null) {
+            UI.getCurrent().navigate("login");
+        } else {
+            refresh();
+        }
     }
 
     public void refresh() {
