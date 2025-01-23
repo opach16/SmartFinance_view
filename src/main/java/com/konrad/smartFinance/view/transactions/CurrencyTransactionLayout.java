@@ -2,12 +2,14 @@ package com.konrad.smartFinance.view.transactions;
 
 import com.konrad.smartFinance.domain.CurrencyTransaction;
 import com.konrad.smartFinance.service.CurrencyTransactionService;
+import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.value.ValueChangeMode;
+import com.vaadin.flow.server.VaadinSession;
 
 import java.time.LocalDate;
 
@@ -53,8 +55,12 @@ public class CurrencyTransactionLayout extends VerticalLayout {
     }
 
     public void refresh() {
-        currencyTransactionService.updateCurrencyTransactions();
-        grid.setItems(currencyTransactionService.getCurrencyTransactions());
+        if (VaadinSession.getCurrent().getAttribute("username") == null) {
+            UI.getCurrent().navigate("login");
+        } else {
+            currencyTransactionService.updateCurrencyTransactions();
+            grid.setItems(currencyTransactionService.getCurrencyTransactions());
+        }
     }
 
     public void update() {
