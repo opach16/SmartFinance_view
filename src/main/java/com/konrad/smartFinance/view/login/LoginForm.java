@@ -40,7 +40,7 @@ public class LoginForm extends FormLayout {
             Notification.show("Login Successful").setPosition(Notification.Position.BOTTOM_CENTER);
             UI.getCurrent().navigate("/");
         } catch (Exception e) {
-            Notification.show(e.getMessage());
+            Notification.show(e.getMessage()).setPosition(Notification.Position.BOTTOM_CENTER);
         }
     }
 

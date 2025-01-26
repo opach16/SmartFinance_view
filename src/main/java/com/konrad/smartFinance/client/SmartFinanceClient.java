@@ -184,7 +184,6 @@ public class SmartFinanceClient {
         if (userDetails != null && !userDetails.getUsername().isEmpty()) {
             VaadinSession.getCurrent().setAttribute("username", userDetails.getUsername());
             VaadinSession.getCurrent().setAttribute("userId", userDetails.getUserId());
-            Notification.show("Logged in successfully as " + userDetails.getUsername() + " ID: " + userDetails.getUserId());
         } else {
             throw new RuntimeException("Login failed: invalid username or password.");
         }
